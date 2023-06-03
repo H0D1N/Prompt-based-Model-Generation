@@ -15,7 +15,7 @@ The training task file I'm using has been placed inside the 'task' folder
 
 Please use the following commands for testing：
 ~~~
-python test.py <MINIST_Dataset_Path>  --ada_kernel --prompt <choose a specific task> --usage <choose a gate usage constraint example:40>  (--task_loc <your task file>)
+python test.py <MINIST_Dataset_Path>  --ada_kernel --resume <checkpoint_path> --prompt <choose a specific task> --usage <choose a gate usage constraint example:40>  (--task_loc <your task file>)
 ~~~
 
 

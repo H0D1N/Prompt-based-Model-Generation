@@ -1,4 +1,4 @@
-from .efficientdet import EfficientDet, HeadNet
+from .efficientdet import EfficientDetUsage, EfficientDetBias, HeadNet
 from .bench import DetBenchTrain, DetBenchPredict
 from .config import get_efficientdet_config
 from .helpers import load_pretrained, load_checkpoint
@@ -33,7 +33,7 @@ def create_model_from_config(
     labeler = kwargs.pop('bench_labeler', False)
 
     # create the base model
-    model = EfficientDet(config, pretrained_backbone=pretrained_backbone, **kwargs)
+    model = EfficientDetUsage(config, pretrained_backbone=pretrained_backbone, **kwargs)
 
     # pretrained weights are always spec'd for original config, load them before we change the model
     if pretrained:

@@ -108,6 +108,8 @@ parser.add_argument('--clip-grad', type=float, default=10.0, metavar='NORM',
                     help='Clip gradient norm (default: 10.0)')
 parser.add_argument('--clip-mode', type=str, default='norm',
                     help='Gradient clipping mode. One of ("norm", "value", "agc")')
+parser.add_argument('--usage', default=None, type=list,
+                    help='usage list, please pass a parameter in the form of a list')
 
 # Optimizer parameters
 parser.add_argument('--opt', default='momentum', type=str, metavar='OPTIMIZER',
@@ -518,7 +520,8 @@ def create_datasets_and_loaders(
     """
     input_config = resolve_input_config(args, model_config=model_config)
 
-    dataset_train, dataset_eval = create_dataset(args.dataset, args.root)
+    # dataset_train, dataset_eval = create_dataset(args.dataset, args.root)
+    dataset_train, dataset_eval = create_dataset(args.dataset, args.root, usage=args.usage)
 
     # setup labeler in loader/collate_fn if not enabled in the model bench
     labeler = None
@@ -590,14 +593,14 @@ def train_epoch(
     batch_time_m = utils.AverageMeter()
     data_time_m = utils.AverageMeter()
     losses_m = utils.AverageMeter()
-    gate_m=utils.AverageMeter()
+    # gate_m=utils.AverageMeter()
 
     model.train()
     clip_params = get_clip_parameters(model, exclude_head='agc' in args.clip_mode)
     end = time.time()
     last_idx = len(loader) - 1
     num_updates = epoch * len(loader)
-    for batch_idx, (input, target,prompt) in enumerate(loader):
+    for batch_idx, (input, target, prompt, usage) in enumerate(loader):
         last_batch = batch_idx == last_idx
         data_time_m.update(time.time() - end)
 
@@ -605,54 +608,55 @@ def train_epoch(
             input = input.contiguous(memory_format=torch.channels_last)
 
         with amp_autocast():
-            output = model(input, target,prompt)
+            output = model(input, target, prompt, usage)
         loss = output['loss']
-        gate=output['decision']
-        if not args.distributed:
-            losses_m.update(loss.item(), input.size(0))
-            
-            gate_sum = 0
-            gate_num = 0
-            total = 0
-            for i in range(3):
-                tmp = gate[:, gate_num:gate_num + 2, :]
-                tmp1 = tmp[:, 0, 0:64].sum()
-                tmp2 = tmp[:, 1, 0:64].sum()
-                #tmp3 = tmp[:, 2, 0:256].sum()
-                gate_sum+= tmp1 + tmp2 #+ tmp3
-                total += 64 + 64 #+ 256
-                gate_num += 2
 
-            for i in range(4):
-                tmp = gate[:, gate_num:gate_num + 2, :]
-                tmp1 = tmp[:, 0, 0:128].sum()
-                tmp2 = tmp[:, 1, 0:128].sum()
-                #tmp3 = tmp[:, 2, 0:512].sum()
-                gate_sum += tmp1 + tmp2 #+ tmp3
-                total += 128 + 128 #+ 512
-                gate_num += 2
-
-            for i in range(6):
-                tmp = gate[:, gate_num:gate_num + 2, :]
-                tmp1 = tmp[:, 0, 0:256].sum()
-                tmp2 = tmp[:, 1, 0:256].sum()
-                #tmp3 = tmp[:, 2, 0:1024].sum()
-                gate_sum += tmp1 + tmp2 #+ tmp3
-                total += 256 + 256 #+ 1024
-                gate_num += 2
-
-            for i in range(3):
-                tmp = gate[:, gate_num:gate_num + 2, :]
-                tmp1 = tmp[:, 0, 0:512].sum()
-                tmp2 = tmp[:, 1, 0:512].sum()
-                #tmp3 = tmp[:, 2, 0:2048].sum()
-                gate_sum += tmp1 + tmp2 #+ tmp3
-                total += 512 + 512 #+ 2048
-                gate_num += 2
-            selection = (gate_sum / (total * input.size(0))) * 100
-            
-            #selection=gate.mean()
-            gate_m.update(selection)
+        # gate = output['decision']
+        # if not args.distributed:
+        #     losses_m.update(loss.item(), input.size(0))
+        #
+        #     gate_sum = 0
+        #     gate_num = 0
+        #     total = 0
+        #     for i in range(3):
+        #         tmp = gate[:, gate_num:gate_num + 2, :]
+        #         tmp1 = tmp[:, 0, 0:64].sum()
+        #         tmp2 = tmp[:, 1, 0:64].sum()
+        #         #tmp3 = tmp[:, 2, 0:256].sum()
+        #         gate_sum+= tmp1 + tmp2 #+ tmp3
+        #         total += 64 + 64 #+ 256
+        #         gate_num += 2
+        #
+        #     for i in range(4):
+        #         tmp = gate[:, gate_num:gate_num + 2, :]
+        #         tmp1 = tmp[:, 0, 0:128].sum()
+        #         tmp2 = tmp[:, 1, 0:128].sum()
+        #         #tmp3 = tmp[:, 2, 0:512].sum()
+        #         gate_sum += tmp1 + tmp2 #+ tmp3
+        #         total += 128 + 128 #+ 512
+        #         gate_num += 2
+        #
+        #     for i in range(6):
+        #         tmp = gate[:, gate_num:gate_num + 2, :]
+        #         tmp1 = tmp[:, 0, 0:256].sum()
+        #         tmp2 = tmp[:, 1, 0:256].sum()
+        #         #tmp3 = tmp[:, 2, 0:1024].sum()
+        #         gate_sum += tmp1 + tmp2 #+ tmp3
+        #         total += 256 + 256 #+ 1024
+        #         gate_num += 2
+        #
+        #     for i in range(3):
+        #         tmp = gate[:, gate_num:gate_num + 2, :]
+        #         tmp1 = tmp[:, 0, 0:512].sum()
+        #         tmp2 = tmp[:, 1, 0:512].sum()
+        #         #tmp3 = tmp[:, 2, 0:2048].sum()
+        #         gate_sum += tmp1 + tmp2 #+ tmp3
+        #         total += 512 + 512 #+ 2048
+        #         gate_num += 2
+        #     selection = (gate_sum / (total * input.size(0))) * 100
+        #
+        #     #selection=gate.mean()
+        #     gate_m.update(selection)
 
         optimizer.zero_grad()
         if loss_scaler is not None:
@@ -682,8 +686,128 @@ def train_epoch(
             if args.distributed:
                 reduced_loss = utils.reduce_tensor(loss.data, args.world_size)
                 losses_m.update(reduced_loss.item(), input.size(0))
-                reduced_gate = utils.reduce_tensor(gate.data, args.world_size)
+                # reduced_gate = utils.reduce_tensor(gate.data, args.world_size)
                 
+                # gate_sum = 0
+                # gate_num = 0
+                # total = 0
+                # for i in range(3):
+                #     tmp = reduced_gate[:, gate_num:gate_num + 2, :]
+                #     tmp1 = tmp[:, 0, 0:64].sum()
+                #     tmp2 = tmp[:, 1, 0:64].sum()
+                #     #tmp3 = tmp[:, 2, 0:256].sum()
+                #     gate_sum += tmp1 + tmp2 #+ tmp3
+                #     total += 64 + 64 #+ 256
+                #     gate_num += 2
+                #
+                # for i in range(4):
+                #     tmp = reduced_gate[:, gate_num:gate_num + 2, :]
+                #     tmp1 = tmp[:, 0, 0:128].sum()
+                #     tmp2 = tmp[:, 1, 0:128].sum()
+                #     #tmp3 = tmp[:, 2, 0:512].sum()
+                #     gate_sum += tmp1 + tmp2 #+ tmp3
+                #     total += 128 + 128 #+ 512
+                #     gate_num += 2
+                #
+                # for i in range(6):
+                #     tmp = reduced_gate[:, gate_num:gate_num + 2, :]
+                #     tmp1 = tmp[:, 0, 0:256].sum()
+                #     tmp2 = tmp[:, 1, 0:256].sum()
+                #     #tmp3 = tmp[:, 2, 0:1024].sum()
+                #     gate_sum += tmp1 + tmp2 #+ tmp3
+                #     total += 256 + 256 #+ 1024
+                #     gate_num += 2
+                #
+                # for i in range(3):
+                #     tmp = reduced_gate[:, gate_num:gate_num + 2, :]
+                #     tmp1 = tmp[:, 0, 0:512].sum()
+                #     tmp2 = tmp[:, 1, 0:512].sum()
+                #     #tmp3 = tmp[:, 2, 0:2048].sum()
+                #     gate_sum += tmp1 + tmp2 #+ tmp3
+                #     total += 512 + 512 #+ 2048
+                #     gate_num +=2
+                # selection = (gate_sum / (total * input.size(0))) * 100
+                #
+                # #selection=reduced_gate.mean()
+                # gate_m.update(selection)
+
+            if args.local_rank == 0:
+                global_batch_size = input.size(0) * args.world_size
+                logging.info(
+                    f'Train: {epoch} [{batch_idx:>4d}/{len(loader)} ({100*batch_idx / last_idx:>3.0f}%)]  '
+                    f'Loss: {losses_m.val:>9.6f} ({losses_m.avg:>6.4f})  '
+                    # f'Gate: {gate_m.val:>9.6f} ({gate_m.avg:>6.4f})  '
+                    f'Time: {batch_time_m.val:.3f}s, {global_batch_size / batch_time_m.val:>7.2f}/s  '
+                    f'({batch_time_m.avg:.3f}s, {global_batch_size / batch_time_m.avg:>7.2f}/s)  '
+                    f'LR: {lr:.3e}  '
+                    f'Data: {data_time_m.val:.3f} ({data_time_m.avg:.3f})'
+                )
+
+                if args.save_images and output_dir:
+                    torchvision.utils.save_image(
+                        input,
+                        os.path.join(output_dir, 'train-batch-%d.jpg' % batch_idx),
+                        padding=0,
+                        normalize=True,
+                    )
+
+        if saver is not None and args.recovery_interval and (
+                last_batch or (batch_idx + 1) % args.recovery_interval == 0):
+            saver.save_recovery(epoch, batch_idx=batch_idx)
+
+        if lr_scheduler is not None:
+            lr_scheduler.step_update(num_updates=num_updates, metric=losses_m.avg)
+
+        end = time.time()
+        # end for
+
+    if hasattr(optimizer, 'sync_lookahead'):
+        optimizer.sync_lookahead()
+
+    return OrderedDict([('loss', losses_m.avg)])
+
+
+def validate(model, loader, args, evaluator=None, log_suffix=''):
+    batch_time_m = utils.AverageMeter()
+    losses_m = utils.AverageMeter()
+    losses_t = utils.AverageMeter()
+    maps_m = utils.AverageMeter()
+    usage_m = utils.AverageMeter()
+
+    model.eval()
+
+    end = time.time()
+    last_idx = len(loader) - 1
+    test_num=0
+    random.shuffle(loader.dataset.task)
+
+    test_usage_list = [30, 40, 50, 60, 70]
+
+    for i in range(2):
+        task = loader.dataset.task[0]
+        loader.dataset.prompt = task
+        usage = [random.choice(test_usage_list)]
+        loader.dataset.usage = usage
+        if args.local_rank == 0:
+            logging.info("val on usage:%d" % usage[0])
+        with torch.no_grad():
+            for batch_idx, (input, target, prompt, usage) in enumerate(loader):
+                last_batch = batch_idx == last_idx
+
+                output = model(input, target, prompt, usage)
+                loss = output['loss']
+                gate = output['gate']
+
+                if evaluator is not None:
+                    evaluator.add_predictions(output['detections'], target)
+
+                if args.distributed:
+                    reduced_loss = utils.reduce_tensor(loss.data, args.world_size)
+                    reduced_gate = utils.reduce_tensor(gate.data, args.world_size)
+                else:
+                    reduced_loss = loss.data
+                    reduced_gate = gate.data
+
                 gate_sum = 0
                 gate_num = 0
                 total = 0
@@ -723,77 +847,9 @@ def train_epoch(
                     total += 512 + 512 #+ 2048
                     gate_num +=2
                 selection = (gate_sum / (total * input.size(0))) * 100
-                
+
                 #selection=reduced_gate.mean()
-                gate_m.update(selection)
-
-            if args.local_rank == 0:
-                global_batch_size = input.size(0) * args.world_size
-                logging.info(
-                    f'Train: {epoch} [{batch_idx:>4d}/{len(loader)} ({100*batch_idx / last_idx:>3.0f}%)]  '
-                    f'Loss: {losses_m.val:>9.6f} ({losses_m.avg:>6.4f})  '
-                    f'Gate: {gate_m.val:>9.6f} ({gate_m.avg:>6.4f})  '
-                    f'Time: {batch_time_m.val:.3f}s, {global_batch_size / batch_time_m.val:>7.2f}/s  '
-                    f'({batch_time_m.avg:.3f}s, {global_batch_size / batch_time_m.avg:>7.2f}/s)  '
-                    f'LR: {lr:.3e}  '
-                    f'Data: {data_time_m.val:.3f} ({data_time_m.avg:.3f})'
-                )
-
-                if args.save_images and output_dir:
-                    torchvision.utils.save_image(
-                        input,
-                        os.path.join(output_dir, 'train-batch-%d.jpg' % batch_idx),
-                        padding=0,
-                        normalize=True,
-                    )
-
-        if saver is not None and args.recovery_interval and (
-                last_batch or (batch_idx + 1) % args.recovery_interval == 0):
-            saver.save_recovery(epoch, batch_idx=batch_idx)
-
-        if lr_scheduler is not None:
-            lr_scheduler.step_update(num_updates=num_updates, metric=losses_m.avg)
-
-        end = time.time()
-        # end for
-
-    if hasattr(optimizer, 'sync_lookahead'):
-        optimizer.sync_lookahead()
-
-    return OrderedDict([('loss', losses_m.avg)])
-
-
-def validate(model, loader, args, evaluator=None, log_suffix=''):
-    batch_time_m = utils.AverageMeter()
-    losses_m = utils.AverageMeter()
-    losses_t=utils.AverageMeter()
-    maps_m=utils.AverageMeter()
-
-
-
-    model.eval()
-
-    end = time.time()
-    last_idx = len(loader) - 1
-    test_num=0
-    random.shuffle(loader.dataset.task)
-    for i in range(1) :
-        task=loader.dataset.task[i]
-        loader.dataset.prompt=task
-        with torch.no_grad():
-            for batch_idx, (input, target,prompt) in enumerate(loader):
-                last_batch = batch_idx == last_idx
-
-                output = model(input, target,prompt)
-                loss = output['loss']
-
-                if evaluator is not None:
-                    evaluator.add_predictions(output['detections'], target)
-
-                if args.distributed:
-                    reduced_loss = utils.reduce_tensor(loss.data, args.world_size)
-                else:
-                    reduced_loss = loss.data
+                usage_m.update(selection)
 
                 torch.cuda.synchronize()
 
@@ -807,6 +863,7 @@ def validate(model, loader, args, evaluator=None, log_suffix=''):
                         f'{log_name}: [{batch_idx:>4d}/{last_idx}]  '
                         f'Time: {batch_time_m.val:.3f} ({batch_time_m.avg:.3f})  '
                         f'Loss: {losses_m.val:>7.4f} ({losses_m.avg:>6.4f}) '
+                        f'Gate: {usage_m.val:>9.6f} ({usage_m.avg:>6.4f})  '
                     )
             losses_t.update(losses_m.avg)
         #metrics = OrderedDict([('loss', losses_m.avg)])

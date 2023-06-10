@@ -41,9 +41,11 @@ class DetectionFastCollate:
         labeler_outputs = dict()
         img_tensor = torch.zeros((batch_size, *batch[0][0].shape), dtype=torch.uint8)
         prompt_tensor = torch.zeros((batch_size, *batch[0][2].shape), dtype=torch.uint8)
+        usage_tensor = torch.zeros(batch_size, dtype=torch.uint8)
         for i in range(batch_size):
             img_tensor[i] += torch.from_numpy(batch[i][0])
             prompt_tensor[i] += batch[i][2]
+            usage_tensor[i] += batch[i][3]
             labeler_inputs = {}
             for tk, tv in batch[i][1].items():
                 instance_info = self.instance_info.get(tk, None)
@@ -99,7 +101,7 @@ class DetectionFastCollate:
         if labeler_outputs:
             target.update(labeler_outputs)
 
-        return img_tensor, target, prompt_tensor
+        return img_tensor, target, prompt_tensor, usage_tensor
 
 
 class PrefetchLoader:
@@ -124,18 +126,20 @@ class PrefetchLoader:
         stream = torch.cuda.Stream()
         first = True
 
-        for next_input, next_target,next_prompt in self.loader:
+        for next_input, next_target,next_prompt,next_usage in self.loader:
             with torch.cuda.stream(stream):
                 next_input = next_input.cuda(non_blocking=True)
                 next_prompt = next_prompt.cuda(non_blocking=True)
                 next_prompt=next_prompt.float()
+                next_usage = next_usage.cuda(non_blocking=True)
+                next_usage = next_usage.float()
                 next_input = next_input.float().sub_(self.mean).div_(self.std)
                 next_target = {k: v.cuda(non_blocking=True) for k, v in next_target.items()}
                 if self.random_erasing is not None:
                     next_input = self.random_erasing(next_input, next_target)
 
             if not first:
-                yield input, target,prompt
+                yield input, target, prompt, usage
             else:
                 first = False
 
@@ -143,8 +147,9 @@ class PrefetchLoader:
             input = next_input
             target = next_target
             prompt=next_prompt
+            usage = next_usage
 
-        yield input, target, prompt
+        yield input, target, prompt, usage
 
     def __len__(self):
         return len(self.loader)

@@ -19,3 +19,4 @@ python test.py <MINIST_Dataset_Path>  --ada_kernel --resume <checkpoint_path> --
 ~~~
 
 
+ 

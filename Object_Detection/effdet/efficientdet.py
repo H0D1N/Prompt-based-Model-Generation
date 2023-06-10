@@ -667,10 +667,180 @@ def get_feature_info(backbone):
     return feature_info
 
 
-class EfficientDet(nn.Module):
+class EfficientDetUsage(nn.Module):
 
     def __init__(self, config, pretrained_backbone=True, alternate_init=False):
-        super(EfficientDet, self).__init__()
+        super(EfficientDetUsage, self).__init__()
+        self.config = config
+
+        # self.config.num_classes = 1
+
+        set_config_readonly(self.config)
+        self.gate = get_TGNetwork()
+        self.backbone = create_model(
+            config.backbone_name,
+            features_only=True,
+            out_indices=self.config.backbone_indices or (2, 3, 4),
+            pretrained=pretrained_backbone,
+            **config.backbone_args,
+        )
+        feature_info = get_feature_info(self.backbone)
+        self.fpn = BiFpn(self.config, feature_info)
+        self.class_net = HeadNet(self.config, num_outputs=self.config.num_classes)
+        self.box_net = HeadNet(self.config, num_outputs=4)
+        # import pdb;pdb.set_trace()
+        for n, m in self.named_modules():
+            if 'backbone' not in n:
+                if alternate_init:
+                    _init_weight_alt(m, n)
+                else:
+                    _init_weight(m, n)
+
+    @torch.jit.ignore()
+    def reset_head(self, num_classes=None, aspect_ratios=None, num_scales=None, alternate_init=False):
+        reset_class_head = False
+        reset_box_head = False
+        set_config_writeable(self.config)
+        if num_classes is not None:
+            reset_class_head = True
+            self.config.num_classes = num_classes
+        if aspect_ratios is not None:
+            reset_box_head = True
+            self.config.aspect_ratios = aspect_ratios
+        if num_scales is not None:
+            reset_box_head = True
+            self.config.num_scales = num_scales
+        set_config_readonly(self.config)
+
+        if reset_class_head:
+            self.class_net = HeadNet(self.config, num_outputs=self.config.num_classes)
+            for n, m in self.class_net.named_modules(prefix='class_net'):
+                if alternate_init:
+                    _init_weight_alt(m, n)
+                else:
+                    _init_weight(m, n)
+
+        if reset_box_head:
+            self.box_net = HeadNet(self.config, num_outputs=4)
+            for n, m in self.box_net.named_modules(prefix='box_net'):
+                if alternate_init:
+                    _init_weight_alt(m, n)
+                else:
+                    _init_weight(m, n)
+
+    @torch.jit.ignore()
+    def toggle_head_bn_level_first(self):
+        """ Toggle the head batchnorm layers between being access with feature_level first vs repeat
+        """
+        self.class_net.toggle_bn_level_first()
+        self.box_net.toggle_bn_level_first()
+
+    def forward_bottleneck(self, layer, x, kernel_selection=None):
+        shortcut = x
+        if kernel_selection == None:
+            x = layer.conv1(x)
+            x = layer.bn1(x)
+            x = layer.act1(x)
+
+            x = layer.conv2(x)
+            x = layer.bn2(x)
+            x = layer.drop_block(x)
+            x = layer.act2(x)
+
+            x = layer.conv3(x)
+            x = layer.bn3(x)
+
+            if layer.drop_path is not None:
+                x = layer.drop_path(x)
+
+            if layer.downsample is not None:
+                shortcut = layer.downsample(shortcut)
+            x += shortcut
+            x = layer.act3(x)
+        else:
+            x = layer.conv1(x)
+            x = layer.bn1(x)
+            # *act_selection[:, 0, :][:, :self.conv1.out_channels, None, None]
+            x = layer.act1(x)
+
+            x = x * kernel_selection[:, 0, :][:, :layer.conv1.out_channels, None,
+                    None]
+
+            x = layer.conv2(x)
+            x = layer.bn2(x)
+
+            # *act_selection[:, 1, :][:, :self.conv2.out_channels, None, None]
+            x = layer.drop_block(x)
+            x = layer.act2(x)
+
+            x = x * kernel_selection[:, 1, :][:, :layer.conv2.out_channels, None,
+                    None]
+
+            x = layer.conv3(x)
+            x = layer.bn3(x)
+
+            # *act_selection[:, 2, :][:, :self.conv3.out_channels, None, None]
+
+            if layer.drop_path is not None:
+                x = layer.drop_path(x)
+
+            if layer.downsample is not None:
+                shortcut = layer.downsample(shortcut)
+            # x = x * kernel_selection[:, 2, :][:, :layer.conv3.out_channels, None,
+            # None]
+            x += shortcut  # * kernel_selection[:, 2, :][:, :layer.conv3.out_channels, None, None]
+            x = layer.act3(x)
+
+            # x = x * kernel_selection[:, 2, :][:, :layer.conv3.out_channels, None,
+            # None]
+
+        return x
+
+    def forward_backbone(self, x, decision=None):
+        output = []
+        x = self.backbone.conv1(x)
+        x = self.backbone.bn1(x)
+        x = self.backbone.act1(x)
+        x = self.backbone.maxpool(x)
+
+        gate_num = 0
+        for layer in self.backbone.layer1:
+            # x = layer(x, decision[:, gate_num:gate_num + 3, :])
+            x = self.forward_bottleneck(layer, x, decision[:, gate_num:gate_num + 2, :])
+            gate_num += 2
+
+        for layer in self.backbone.layer2:
+            # x = layer(x, decision[:, gate_num:gate_num + 3, :])
+            x = self.forward_bottleneck(layer, x, decision[:, gate_num:gate_num + 2, :])
+            gate_num += 2
+        output.append(x)
+
+        for layer in self.backbone.layer3:
+            # x = layer(x, decision[:, gate_num:gate_num + 3, :])
+            x = self.forward_bottleneck(layer, x, decision[:, gate_num:gate_num + 2, :])
+            gate_num += 2
+        output.append(x)
+        for layer in self.backbone.layer4:
+            # x = layer(x, decision[:, gate_num:gate_num + 3, :])
+            x = self.forward_bottleneck(layer, x, decision[:, gate_num:gate_num + 2, :])
+            gate_num += 2
+        output.append(x)
+        return output, decision[:, gate_num:, :]
+
+    def forward(self, x, prompt=None):
+        decision, discrete_gate = self.gate(prompt)
+        # gate = decision
+        # x = self.backbone(x)
+        x, decision = self.forward_backbone(x, decision)
+        x = self.fpn(x)
+        x_class = self.class_net(x, decision[:, 0:3, :])
+        x_box = self.box_net(x, decision[:, 3:6, :])
+        return x_class, x_box, discrete_gate
+
+class EfficientDetBias(nn.Module):
+
+    def __init__(self, config, pretrained_backbone=True, alternate_init=False):
+        super(EfficientDetBias, self).__init__()
         self.config = config
 
         #self.config.num_classes = 1

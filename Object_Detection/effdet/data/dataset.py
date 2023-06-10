@@ -9,6 +9,7 @@ import numpy as np
 import json
 from PIL import Image
 import torch
+import math
 from .parsers import create_parser
 
 
@@ -21,7 +22,7 @@ class DetectionDatset(data.Dataset):
 
     """
 
-    def __init__(self, data_dir, parser=None, parser_kwargs=None, transform=None,split=None,data_root=None):
+    def __init__(self, data_dir, parser=None, parser_kwargs=None, transform=None,split=None,data_root=None, usage=None):
         super(DetectionDatset, self).__init__()
         parser_kwargs = parser_kwargs or {}
         self.data_dir = data_dir
@@ -46,6 +47,11 @@ class DetectionDatset(data.Dataset):
         self.cat_id_to_label = {cat_id: i+5  for i, cat_id in enumerate(self._parser.cat_ids)}
 
         self._transform = transform
+
+        if usage:
+            self.usage = usage
+        else:
+            self.usage = [x for x in range(30, 70, 5)]
 
     def __getitem__(self, index):
         """
@@ -82,7 +88,13 @@ class DetectionDatset(data.Dataset):
 
         prompt=torch.zeros(9).scatter_(0, torch.tensor(mask), 1).numpy()#np.array(mask)#
 
-        return img, target, prompt
+        if self.usage:
+            usage=random.choice(self.usage)
+            position=position_encoding(usage,20)
+            prompt=torch.concat([prompt,position])
+        else:
+            usage = None
+        return img, target, prompt, usage
 
     def __len__(self):
         return len(self._parser.img_ids)
@@ -98,6 +110,14 @@ class DetectionDatset(data.Dataset):
     @transform.setter
     def transform(self, t):
         self._transform = t
+
+def position_encoding(position, d_model):
+    position = torch.tensor(position, dtype=torch.float32)
+    div_term = torch.exp(torch.arange(0, d_model, 2, dtype=torch.float32) * -(math.log(10000.0) / d_model))
+    encodings = torch.zeros(d_model)
+    encodings[0::2] = torch.sin(position * div_term)
+    encodings[1::2] = torch.cos(position * div_term)
+    return encodings
 
 
 class SkipSubset(data.Dataset):

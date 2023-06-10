@@ -148,14 +148,17 @@ def loss_fn(
         cls_targets: List[torch.Tensor],
         box_targets: List[torch.Tensor],
         num_positives: torch.Tensor,
+        discrete_gate,
+        usage,
         num_classes: int,
         alpha: float,
         gamma: float,
         delta: float,
         box_loss_weight: float,
+        usage_loss_weight,
         label_smoothing: float = 0.,
         legacy_focal: bool = False,
-        ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     """Computes total detection loss.
     Computes total detection loss including box and class loss from all levels.
     Args:
@@ -216,8 +219,59 @@ def loss_fn(
     # Sum per level losses to total loss.
     cls_loss = torch.sum(torch.stack(cls_losses, dim=-1), dim=-1)
     box_loss = torch.sum(torch.stack(box_losses, dim=-1), dim=-1)
-    total_loss = cls_loss + box_loss_weight * box_loss
-    return total_loss, cls_loss, box_loss
+
+    selection = cal_usage(discrete_gate)
+    usage = usage / 100
+    usage_criterion = nn.MSELoss()
+    usage_loss = usage_criterion(selection, usage)
+
+    total_loss = cls_loss + box_loss_weight * box_loss + usage_loss_weight * usage_loss
+
+    return total_loss, cls_loss, box_loss, usage_loss
+
+def cal_usage(decision):
+    gate_sum = 0
+    gate_num = torch.zeros(decision.size(0))
+    total = 0
+    for i in range(3):
+        tmp = decision[:, gate_num:gate_num + 2, :]
+        tmp1 = torch.norm(tmp[:, 0, 0:64], p=1, dim=1)
+        tmp2 = torch.norm(tmp[:, 1, 0:64], p=1, dim=1)
+        # tmp3 = tmp[:, 2, 0:256].sum()
+        gate_sum += tmp1 + tmp2  # + tmp3
+        total += 64 + 64  # + 256
+        gate_num += 2
+
+    for i in range(4):
+        tmp = decision[:, gate_num:gate_num + 2, :]
+        tmp1 = torch.norm(tmp[:, 0, 0:128], p=1, dim=1)
+        tmp2 = torch.norm(tmp[:, 1, 0:128], p=1, dim=1)
+        # tmp3 = tmp[:, 2, 0:512].sum()
+        gate_sum += tmp1 + tmp2  # + tmp3
+        total += 128 + 128  # + 512
+        gate_num += 2
+
+    for i in range(6):
+        tmp = decision[:, gate_num:gate_num + 2, :]
+        tmp1 = torch.norm(tmp[:, 0, 0:256], p=1, dim=1)
+        tmp2 = torch.norm(tmp[:, 1, 0:256], p=1, dim=1)
+        # tmp3 = tmp[:, 2, 0:1024].sum()
+        gate_sum += tmp1 + tmp2  # + tmp3
+        total += 256 + 256  # + 1024
+        gate_num += 2
+
+    for i in range(3):
+        tmp = decision[:, gate_num:gate_num + 2, :]
+        tmp1 = torch.norm(tmp[:, 0, 0:512], p=1, dim=1)
+        tmp2 = torch.norm(tmp[:, 1, 0:512], p=1, dim=1)
+        # tmp3 = tmp[:, 2, 0:2048].sum()
+        gate_sum += tmp1 + tmp2  # + tmp3
+        total += 512 + 512  # + 2048
+        gate_num += 2
+
+    selection = (gate_sum / total)
+
+    return selection
 
 
 loss_jit = torch.jit.script(loss_fn)
@@ -238,6 +292,7 @@ class DetectionLoss(nn.Module):
         self.label_smoothing = config.label_smoothing
         self.legacy_focal = config.legacy_focal
         self.use_jit = config.jit_loss
+        self.usage_loss_weight = config.usage_loss_weight
 
     def forward(
             self,
@@ -245,7 +300,10 @@ class DetectionLoss(nn.Module):
             box_outputs: List[torch.Tensor],
             cls_targets: List[torch.Tensor],
             box_targets: List[torch.Tensor],
-            num_positives: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+            num_positives: torch.Tensor,
+            decision,
+            usage
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
 
         l_fn = loss_fn
         if not torch.jit.is_scripting() and self.use_jit:
@@ -254,6 +312,6 @@ class DetectionLoss(nn.Module):
             l_fn = loss_jit
 
         return l_fn(
-            cls_outputs, box_outputs, cls_targets, box_targets, num_positives,
+            cls_outputs, box_outputs, cls_targets, box_targets, num_positives, decision, usage,
             num_classes=self.num_classes, alpha=self.alpha, gamma=self.gamma, delta=self.delta,
-            box_loss_weight=self.box_loss_weight, label_smoothing=self.label_smoothing, legacy_focal=self.legacy_focal)
+            box_loss_weight=self.box_loss_weight, usage_loss_weight=self.usage_loss_weight, label_smoothing=self.label_smoothing, legacy_focal=self.legacy_focal)

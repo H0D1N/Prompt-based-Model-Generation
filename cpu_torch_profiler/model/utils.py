@@ -208,19 +208,3 @@ def get_model(config):
 
     i = i + 1
     return model
-
-def plot_fig(file_name, start, stop ,step):
-    with open(file_name + ".txt") as f:
-        lines = f.readlines()
-        count = 1
-        timeings = []
-        for line in lines:
-            if count % 3 == 0:
-                timeings.append(float(re.findall(r"\d+\.?\d*", line)[0]))
-            count += 1
-    fig, ax = plt.subplots()
-    ax.set_xlabel("Config")
-    ax.set_ylabel("Time/ms")
-    ax.set_title("Model inference time with_" + file_name.split("/")[-1])
-    ax.plot(np.arange(start, stop, step), timeings)
-    plt.savefig(file_name + ".png")   

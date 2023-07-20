@@ -1,5 +1,5 @@
 import torch
-from model.utils import *
+from utils import *
 from torch.profiler import profile, ProfilerActivity
 
 length = 38
@@ -14,7 +14,7 @@ batch_size = [1, 2, 4, 8, 16, 32]
 
 for batch in batch_size:
     inputs = torch.randn(batch, 3, 640, 640, dtype=torch.float)
-    file = open("data/batch_"+ str(batch) + "/cpu_profiler_res.txt", "w")
+    file = open("backbone_run_4_data/batch_"+ str(batch) + "/cpu_profiler_res.txt", "w")
     for config in  configs:
         model = get_model(config)
 
@@ -25,7 +25,7 @@ for batch in batch_size:
             file.write("--------------------------------------------------------------------------------------------- \nCurrent config is [ " + str(round(config[0],2)) + ", ……, " + str(round(config[0],2)) + " ]\n")
             file.write("Under batch " + str(batch) + ", average time is " + str(p.profiler.self_cpu_time_total/runs/1000) + "ms\n")
             file.flush()
-            p.export_chrome_trace("data/batch_"+ str(batch) + "/config_" + str(round(config[0], 2)) + "_profiler_trace"  + ".json")
+            p.export_chrome_trace("backbone_run_4_data/batch_"+ str(batch) + "/config_" + str(round(config[0], 2)) + "_profiler_trace"  + ".json")
 
         with profile(
             activities=[ProfilerActivity.CPU],

@@ -6,6 +6,9 @@ from matplotlib import pyplot as plt
 from .efficientdet import EfficientDet
 from .config import get_efficientdet_config
 
+def configs_generate(module_num):
+    return [0,1] [[1,2,3], [4,5,6]]
+
 # generate config:[0.5,0.62,0.4....]  usage of each decision
 def generate_configs(length, start, stop, step):
     # configs contains several config which is a list of 32 random numbers from 0 to 1

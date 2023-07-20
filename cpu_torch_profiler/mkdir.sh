@@ -2,7 +2,7 @@
 
 cd "modling_data"
 # 声明和初始化数组
-numbers=(1 2 4 8 16 32)
+numbers=(1 8 32)
 
 count = 18
 # 创建文件夹

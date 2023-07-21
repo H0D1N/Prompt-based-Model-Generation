@@ -2,9 +2,24 @@ import math
 import torch.nn as nn
 import numpy as np
 import json
+import random
 from matplotlib import pyplot as plt
 from .efficientdet import EfficientDet
 from .config import get_efficientdet_config
+
+def configs_random(configs_num):
+    config_indices = []
+    for num in range(1, 19):
+        if num < 1 or num > 18:
+            raise ValueError("Invalid num. num should be an integer between 1 and 18.")
+        elif num >= 1 and num <= 16:
+            config_indices.append([2 * num - 2, 2 * num - 1])
+        elif num == 17:
+            config_indices.append([32, 33, 34])
+        elif num == 18:
+            config_indices.append([35, 36, 37])
+    configs = [[round(random.random(), 3) for _ in range(38)] for a in range(configs_num)]
+    return config_indices, configs
 
 # 针对第module_num个module，生成所有可能的config，无关位置的值为1
 def configs_generate(module_num):
@@ -20,7 +35,7 @@ def configs_generate(module_num):
     configs = [[1] * 38 for _ in range(num_combinations)]
 
     # 生成从0.1到1，步长为0.1的列表
-    value_range = [0.1 + 0.1 * i for i in range(10)]
+    value_range = [round(0.1 + 0.1 * i, 1) for i in range(10)]
 
     # Generate the config indices based on module_num
     if module_num >= 1 and module_num <= 16:
@@ -49,7 +64,7 @@ def configs_generate(module_num):
     return config_indices, configs
 
 # 针对生成的trace.json文件，提取对应module的延时
-def get_module_latency(trace_name, runs, module_num):
+def get_module_latency(trace_name, runs):
     modules = 18
     ts_difference_matrix = []
     with open(trace_name, 'r') as file:
@@ -141,8 +156,11 @@ def get_module_latency(trace_name, runs, module_num):
                                                                                 conv2d_period_index + 131 - 20)
         # 转为runs*modules的矩阵
         ts_difference_matrix = np.reshape(ts_difference_list, (runs, modules))
-    # 返回第module_num个module的延时
-    return ts_difference_matrix[:, module_num]
+
+        # 模型的总延时, 长度runs
+        total_Profiler_latency = [raw_data[pos]['dur'] for pos in ProfilerStep_pos]
+
+    return ts_difference_matrix, total_Profiler_latency
 
 # generate config:[0.5,0.62,0.4....]  usage of each decision
 def generate_configs(length, start, stop, step):

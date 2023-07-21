@@ -1,24 +1,5 @@
-# import json
-# import numpy as np
-# import matplotlib.pyplot as plt
-
-# file_prefix = 'data/batch_1/config_'
-# file_suffix = '_profiler_trace.json'
-
-# with open(file_prefix + str(0.1) + file_suffix, 'r') as file:
-#     raw_data = json.load(file)["traceEvents"]
-#     ts_data = [x["ts"] for x in raw_data]
-#     len_data = len(ts_data)
-#     print(len_data)
-#     fig, ax = plt.subplots()
-#     ax.plot(np.arange(0, len_data), ts_data)
-#     ax.set_ylabel("time")
-#     ax.set_xlabel("event")
-#     ax.set_title("Model inference time on M1 CPU")
-#     plt.show()
-
 import torch
-from model.utils2 import *
+from model.utils import *
 from torch.profiler import profile, ProfilerActivity
 
 length = 38

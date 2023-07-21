@@ -7,7 +7,7 @@ runs = 3
 
 batch_size = [1]
 modules = 18
-configs_num = 5000
+configs_num = 3000
 config_indices, configs = configs_random(configs_num)
 
 modul_config = [[] for _ in range(modules)] # 记录每一次训练的config
@@ -15,18 +15,19 @@ module_data = [[] for _ in range(modules) ] # 记录每一次训练的module lat
 overall_latency = []
 
 for batch in batch_size:
-    file_prefix = "data_4_modling/"+ "/batch_" + str(batch) 
+    file_prefix = "data/modling/"+ "/batch_" + str(batch) 
     inputs = torch.randn(batch, 3, 640, 640, dtype=torch.float)
 
     for config_num, config in enumerate(configs):
         model = get_model(config)
         trace_name = file_prefix + "/raw_data/run_No." + str(config_num) + "_trace.json"
+        print("-------------------------------------------------------------------------------------------------------------------------------------------------------------")
+        print("Batch size: " + str(batch))
+        print("Config num:", config_num)
+        print("Current config:", config)
 
         def trace_handler(p):
             print(p.key_averages().table())
-            print("Batch size: " + str(batch))
-            print("Config num:", config_num)
-            print("Current config:", config)
             print("Average inference time:", p.profiler.self_cpu_time_total/runs/1000, "ms")
             print("------------------------------------------------------------------------------------------------------------------------------------------------------------- \n\n")
             p.export_chrome_trace(trace_name)        
@@ -66,4 +67,7 @@ for batch in batch_size:
                 # 输入当前module每一次训练的latency
                 for latency in module_data[module_num][count]:
                     f.write(str(latency) + "\t")
+                f.write("\t")
+                for total_latency in overall_latency[count]:
+                    f.write(str(total_latency) + "\t")
                 f.write("\n")

@@ -1,7 +1,7 @@
 import json
 import numpy as np
 
-file_prefix = "data/batch_2/config_"  # 文件名前缀
+file_prefix = "full_model_run_4_data/batch_1/config_"  # 文件名前缀
 file_suffix = "_profiler_trace.json"  # 文件名后缀
 num_files = 10  # 文件数量
 run_period = 4
@@ -172,3 +172,5 @@ for i in range(num_files):
                             range(len(total_Profiler_latency))], "  Average:", round(np.mean(Overhead_latency) / np.mean(total_Profiler_latency), 3), "\n")
         
         overhead_latency_matrix[i, :] = Overhead_latency  # 填入10*4的Overhead_latency矩阵中
+
+print(overhead_latency_matrix)

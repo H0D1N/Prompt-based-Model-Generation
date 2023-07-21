@@ -18,7 +18,7 @@ def configs_random(configs_num):
             config_indices.append([32, 33, 34])
         elif num == 18:
             config_indices.append([35, 36, 37])
-    configs = [[round(random.random(), 3) for _ in range(38)] for a in range(configs_num)]
+    configs = [[round(random.uniform(0.05, 1), 4) for _ in range(38)] for a in range(configs_num)]
     return config_indices, configs
 
 # 针对第module_num个module，生成所有可能的config，无关位置的值为1
@@ -168,6 +168,7 @@ def generate_configs(length, start, stop, step):
     configs = [[x]*length for x in np.arange(start, stop, step)]
     return configs
 
+# generate model according to config
 def get_model(config):
     model_config = get_efficientdet_config('resdet50')
     model =EfficientDet(config=model_config,pretrained_backbone=False)

@@ -154,8 +154,8 @@ def get_module_latency(trace_name, runs):
             # 此处理想是131, 但是最后一次会超出index,只能改为130
             ts_difference_list[period_index + 17] = conv2d_timestamp_difference(conv2d_period_index + 130,  
                                                                                 conv2d_period_index + 131 - 20)
-        # 转为runs*modules的矩阵
-        ts_difference_matrix = np.reshape(ts_difference_list, (runs, modules))
+        # 转为modules * runs的矩阵
+        ts_difference_matrix = np.transpose(np.reshape(ts_difference_list, (runs, modules)))
 
         # 模型的总延时, 长度runs
         total_Profiler_latency = [raw_data[pos]['dur'] for pos in ProfilerStep_pos]

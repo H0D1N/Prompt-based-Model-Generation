@@ -2,16 +2,16 @@ import torch
 from model.utils import *
 from torch.profiler import profile, ProfilerActivity
 
-warmups = 2 # warmup number before sampling
-runs = 3    # actual profiling number in each sampling
+warmups = 2
+runs = 10
 
-batch_size = [16, 32]
+batch_size = [1]
 modules = 18
-sample_num = 500    # number of samples in each batch size
-config_indices, configs = configs_random(sample_num)
+configs_num = 500
+config_indices, configs = configs_random(configs_num)
 
-modul_config = [[] for _ in range(modules)] # configs of each module in each sample
-module_data = [[] for _ in range(modules) ] # latency of each module in each sample
+modul_config = [[] for _ in range(modules)] # 记录每一次训练的config
+module_data = [[] for _ in range(modules) ] # 记录每一次训练的module latency
 overall_latency = []
 
 for batch in batch_size:
@@ -23,7 +23,7 @@ for batch in batch_size:
         trace_name = file_prefix + "/raw_data/run_No." + str(config_num) + "_trace.json"
         print("-------------------------------------------------------------------------------------------------------------------------------------------------------------")
         print("Batch size: " + str(batch))
-        print("Sample No:", config_num)
+        print("Config num:", config_num)
         print("Current config:", config)
 
         def trace_handler(p):
@@ -55,16 +55,16 @@ for batch in batch_size:
 
     for module_num in range(modules):
         with open(file_prefix + "/module_" + str(module_num + 1) + ".txt", "w") as f:
-            # index of configs of current module
+            # 输入当前module对应的config的index
             for index in config_indices[module_num]:
                 f.write(str(index) + "\t")
             f.write("\n")
-            for count in range(sample_num):
-                # write configs of current module
+            for count in range(configs_num):
+                # 输入当前module每一次训练的config
                 for config in modul_config[module_num][count]:
                     f.write(str(config) + "\t")
                 f.write("\t")
-                # write latency of current module
+                # 输入当前module每一次训练的latency
                 for latency in module_data[module_num][count]:
                     f.write(str(latency) + "\t")
                 f.write("\t")

@@ -5,9 +5,9 @@ from torch.profiler import profile, ProfilerActivity
 warmups = 2
 runs = 3
 
-batch_size = [1]
+batch_size = [16, 32]
 modules = 18
-configs_num = 3000
+configs_num = 500
 config_indices, configs = configs_random(configs_num)
 
 modul_config = [[] for _ in range(modules)] # 记录每一次训练的config

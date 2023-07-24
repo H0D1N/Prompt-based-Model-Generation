@@ -2,9 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-runs = 1000
+runs = 3000
 ratio = 0.7  # 80% of the data is used for training, and 20% is used for testing
-slice_num = int(1000 * ratio)  # 800
+slice_num = int(runs * ratio)  # 800
 
 # fig = plt.figure()
 # ##################################### modeling 1 to 16  #######################################
@@ -107,7 +107,7 @@ slice_num = int(1000 * ratio)  # 800
 
 # def predictor(file_num):
 #     # Coefficients obtained from the fitting process
-#     ''' 1000组训练
+#     ''' runs组训练
 #     coefficients = {
 #         1: [5.167, 5.702, 16.679],
 #         2: [6.908, 6.339, 8.988],
@@ -307,7 +307,7 @@ slice_num = int(1000 * ratio)  # 800
 # def total_model_evaluator():
 #     avg_model_overhead, model_latency = avg_overhead_model_latency()
 
-#     total_module_predict = np.zeros((1000 - slice_num, 1))
+#     total_module_predict = np.zeros((runs - slice_num, 1))
 
 #     for file_num in range(1, 19):
 #         module_predict, _ = predictor(file_num)
@@ -346,19 +346,19 @@ slice_num = int(1000 * ratio)  # 800
 ################################### predictor using all 38 configs #################################
 configs_train = np.ones((slice_num, 39))
 model_latency_train = np.zeros((slice_num,1))
-configs_valid = np.ones((1000-slice_num, 39))
-model_latency_valid = np.zeros((1000-slice_num,1))
+configs_valid = np.ones((runs-slice_num, 39))
+model_latency_valid = np.zeros((runs-slice_num,1))
 
 for file_num in range(1, 19):
     file_path = "continuous/module_" + str(file_num) + ".txt"
     # Read data from the TXT file and ignore the first line
     with open(file_path, "r") as file:
-        lines = file.readlines()[1:]
+        lines = file.readlines()[1:(runs + 1)]
     for count, line in enumerate(lines):
         data = line.strip().split()
         if count < slice_num:
             if file_num < 17:
-                configs_train[count][file_num *2 - 2] = float(data[0])
+                configs_train[count][file_num * 2 - 2] = float(data[0])
                 configs_train[count][file_num * 2 - 1] = float(data[1])
             elif file_num == 17:
                 configs_train[count][32] = float(data[0])
@@ -372,7 +372,7 @@ for file_num in range(1, 19):
             
         else:
             if file_num < 17:
-                configs_valid[count-slice_num][file_num *2 - 2] = float(data[0])
+                configs_valid[count-slice_num][file_num * 2 - 2] = float(data[0])
                 configs_valid[count-slice_num][file_num * 2 - 1] = float(data[1])
             elif file_num == 17:
                 configs_valid[count-slice_num][32] = float(data[0])
@@ -414,7 +414,7 @@ plt.title('Model Latency Accuracy and Statistics (using all 38 configs)', fontsi
 x_coord = min(x_values)  # Using the leftmost x-coordinate
 y_coord = min(model_latency_acc)  # Using the lowest y-coordinate
 plt.text(x_coord, y_coord, f'acc avg: {model_latency_avg_acc:.3f}', fontsize=12)
-plt.text(x_coord + 50, y_coord, f'acc std: {model_latency_std_acc:.3f}', fontsize=12)
+plt.text(x_coord + 100, y_coord, f'acc std: {model_latency_std_acc:.3f}', fontsize=12)
 
 plt.grid(True)
 plt.tight_layout()  # To improve spacing

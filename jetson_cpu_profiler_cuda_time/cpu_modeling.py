@@ -10,7 +10,7 @@ fig = plt.figure()
 ##################################### modeling 1 to 16  #######################################
 
 for file_num in range(1, 17):
-    file_path = "continuous/module_" + str(file_num) + ".txt"
+    file_path = "data/cpu_modeling/batch_1/module_" + str(file_num) + ".txt"
     # Read data from the TXT file and ignore the first line
     with open(file_path, "r") as file:
         lines = file.readlines()[1:(slice_num + 1)]
@@ -64,7 +64,7 @@ plt.show()
 
 
 for file_num in range(17, 19):  # Process files 17 and 18
-    file_path = "continuous/module_" + str(file_num) + ".txt"
+    file_path = "data/cpu_modeling/batch_1/module_" + str(file_num) + ".txt"
     # Read data from the TXT file and ignore the first line
     with open(file_path, "r") as file:
         lines = file.readlines()[1:(slice_num + 1)]
@@ -153,7 +153,7 @@ def predictor(file_num):
 
     if 1 <= file_num <= 16:
 
-        file_path = "continuous/module_" + str(file_num) + ".txt"
+        file_path = "data/cpu_modeling/batch_1/module_" + str(file_num) + ".txt"
         # Read data from the TXT file and ignore the first line
         with open(file_path, "r") as file:
             lines = file.readlines()[(slice_num + 1):]
@@ -179,7 +179,7 @@ def predictor(file_num):
 
     if file_num == 17 or file_num == 18:
 
-        file_path = "continuous/module_" + str(file_num) + ".txt"
+        file_path = "data/cpu_modeling/batch_1/module_" + str(file_num) + ".txt"
         # Read data from the TXT file and ignore the first line
         with open(file_path, "r") as file:
             lines = file.readlines()[(slice_num + 1):]
@@ -251,7 +251,7 @@ plt.show()
 
 def avg_overhead_model_latency():
     ############# Extract total model latency ###########
-    file_path = "continuous/module_" + str(1) + ".txt"
+    file_path = "data/cpu_modeling/batch_1/module_" + str(1) + ".txt"
     # Read data from the TXT file and ignore the first line
     with open(file_path, "r") as file:
         lines = file.readlines()[1:]
@@ -266,7 +266,7 @@ def avg_overhead_model_latency():
     ####### Extract sum (module latency) ###############
     sum_module = np.zeros((len(lines), 1))
     for file_num in range(1, 17):
-        file_path = "continuous/module_" + str(file_num) + ".txt"
+        file_path = "data/cpu_modeling/batch_1/module_" + str(file_num) + ".txt"
         # Read data from the TXT file and ignore the first line
         with open(file_path, "r") as file:
             lines = file.readlines()[1:]
@@ -280,7 +280,7 @@ def avg_overhead_model_latency():
         sum_module += tmp
 
     for file_num in range(17, 19):
-        file_path = "continuous/module_" + str(file_num) + ".txt"
+        file_path = "data/cpu_modeling/batch_1/module_" + str(file_num) + ".txt"
         # Read data from the TXT file and ignore the first line
         with open(file_path, "r") as file:
             lines = file.readlines()[1:]
@@ -349,7 +349,7 @@ plt.show()
 # model_latency_valid = np.zeros((runs-slice_num,1))
 
 # for file_num in range(1, 19):
-#     file_path = "continuous/module_" + str(file_num) + ".txt"
+#     file_path = "data/cpu_modeling/batch_1/module_" + str(file_num) + ".txt"
 #     # Read data from the TXT file and ignore the first line
 #     with open(file_path, "r") as file:
 #         lines = file.readlines()[1:(runs + 1)]

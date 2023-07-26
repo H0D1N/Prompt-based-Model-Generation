@@ -15,7 +15,7 @@ module_data = [[] for _ in range(modules) ] # latency of each module in each sam
 overall_latency = []
 
 for batch in batch_size:
-    file_prefix = "data/modling/"+ "/batch_" + str(batch) 
+    file_prefix = "data/modeling/"+ "/batch_" + str(batch) 
     inputs = torch.randn(batch, 3, 640, 640, dtype=torch.float)
 
     for config_num, config in enumerate(configs):

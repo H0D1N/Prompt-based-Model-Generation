@@ -15,7 +15,7 @@ module_data = [[] for _ in range(modules) ] # 记录每一次训练的module lat
 overall_latency = []
 
 for batch in batch_size:
-    file_prefix = "data/modling/"+ "/batch_" + str(batch) 
+    file_prefix = "data/cpu_modeling/"+ "/batch_" + str(batch) 
     inputs = torch.randn(batch, 3, 640, 640, dtype=torch.float)
 
     for config_num, config in enumerate(configs):

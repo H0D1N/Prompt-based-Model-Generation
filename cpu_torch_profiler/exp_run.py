@@ -22,8 +22,7 @@ for batch in batch_size:
         model = get_model(config)
         trace_name = file_prefix + "/raw_data/run_No." + str(config_num) + "_trace.json"
         print("-------------------------------------------------------------------------------------------------------------------------------------------------------------")
-        print("Batch size: " + str(batch))
-        print("Sample No:", config_num)
+        print("Batch size: " + str(batch), "    Sample No:", config_num)
         print("Current config:", config)
 
         def trace_handler(p):

@@ -44,32 +44,3 @@ for batch in batch_size:
         for _ in range(warmups + runs):
              _ = session.run(None, ort_inputs)
         session.end_profiling()
-
-
-    #     module_latency, totlal_latency = get_module_latency(trace_name, runs)
-    #     for module_num in range(modules):
-    #         left = config_indices[module_num][0]
-    #         right = config_indices[module_num][-1] + 1
-    #         modul_config[module_num].append(config[left:right])
-    #         module_data[module_num].append(module_latency[module_num])
-
-    #     overall_latency.append(totlal_latency)
-
-    # for module_num in range(modules):
-    #     with open(file_prefix + "/module_" + str(module_num + 1) + ".txt", "w") as f:
-    #         # index of configs of current module
-    #         for index in config_indices[module_num]:
-    #             f.write(str(index) + "\t")
-    #         f.write("\n")
-    #         for count in range(sample_num):
-    #             # write configs of current module
-    #             for config in modul_config[module_num][count]:
-    #                 f.write(str(config) + "\t")
-    #             f.write("\t")
-    #             # write latency of current module
-    #             for latency in module_data[module_num][count]:
-    #                 f.write(str(latency) + "\t")
-    #             f.write("\t")
-    #             for total_latency in overall_latency[count]:
-    #                 f.write(str(total_latency) + "\t")
-    #             f.write("\n")

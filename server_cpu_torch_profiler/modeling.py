@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-
 runs = 3000
 ratio = 0.7  # 80% of the data is used for training, and 20% is used for testing
 slice_num = int(runs * ratio)  # 800

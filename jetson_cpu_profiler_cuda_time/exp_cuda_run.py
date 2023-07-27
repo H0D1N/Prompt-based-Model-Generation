@@ -4,7 +4,7 @@ import numpy as np
 warmups = 20 # warmup number before sampling
 runs = 10    # actual profiling number in each sampling
 
-batch_size = [1, 2, 4]
+batch_size = [8, 16, 32]
 modules = 18
 sample_num = 500   # number of samples in each batch size
 config_indices, configs = configs_random(sample_num)

@@ -1,7 +1,7 @@
 import torch
 from model.utils import *
 import numpy as np
-warmups = 20 # warmup number before sampling
+warmups = 50 # warmup number before sampling
 runs = 10    # actual profiling number in each sampling
 
 batch_size = [8, 16, 32]
@@ -11,6 +11,11 @@ config_indices, configs = configs_random(sample_num)
 
 device = torch.device("cuda")
 
+model = get_model(configs[0]).to(device)
+inputs = torch.randn(1, 3, 640, 640, dtype=torch.float).to(device)
+# GPU-WARM-UP
+for _ in range(warmups):
+    _ = model(inputs)
 
 for batch in batch_size:
     file_path = "data/cuda_modeling/"+ "/batch_" + str(batch) + ".txt"
@@ -25,10 +30,6 @@ for batch in batch_size:
         print("Current config:", config)
 
         starter, ender = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
-
-        # GPU-WARM-UP
-        for _ in range(warmups):
-            _ = model(inputs)
 
         # SYNCHRONIZE
         torch.cuda.synchronize()
@@ -46,7 +47,7 @@ for batch in batch_size:
         
         mean_syn = np.sum(timings) / runs
         std_syn = np.std(timings)
-        print("latency acc: ", mean_syn, "ms", "    std: ", std_syn, "ms\n")
+        print("latency avg: ", mean_syn, "ms", "    std: ", std_syn, "ms\n")
         model_latency[config_num] = mean_syn
 
     with open(file_path, 'w') as f:

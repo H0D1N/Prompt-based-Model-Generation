@@ -4,4 +4,5 @@
 4. `exp_run.py`是跑实验的主代码，其中可以设置运行次数，保存位置，config生成，数据提取与分配等；
 5. `latency_modling.py`用来构建不同module的延时预测器，并通过把数据分为训练集和预测集，验证预测的正确性；此外也增加了将全部38个config做为一组自变量从而预测模型整体延时的预测器，效果和单独预测每个config的预测器相当；
 6. `memory_modeling`采用整体38个config对模型peak memory建模；
-6. `py2onnx.py`用于把config指示下的torch模型转变为onnx格式的模型，用于mobile端和vpu上测试。
+7. `py2onnx.py`用于把config指示下的torch模型转变为onnx格式的模型，用于mobile端和vpu上测试。
+8. current warmups and runs are 2 and 3 times

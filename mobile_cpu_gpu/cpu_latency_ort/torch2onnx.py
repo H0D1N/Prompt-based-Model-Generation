@@ -2,7 +2,7 @@ from model.utils import *
 
 sample_num = 1000
 _, configs = configs_random(sample_num)
-config_file = "onnx_models/configs.txt"
+config_file = "../onnx_models_op12/configs.txt"
 
 with open(config_file, "w") as f:
     for count, config in enumerate(configs):

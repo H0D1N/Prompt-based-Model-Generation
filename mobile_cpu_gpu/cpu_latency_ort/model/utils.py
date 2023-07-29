@@ -315,7 +315,7 @@ def generate_onnx_model(config, config_count):
     i = i + 1
 
 ############################# save onnx model #############################
-    save_dir = "/home/sunyi/Documents/AIOT/PBMG/Prompt-based-Model-Generation/mobile_cpu_gpu/latency_ort/onnx_models/"
+    save_dir = "/home/sunyi/Documents/AIOT/PBMG/Prompt-based-Model-Generation/mobile_cpu_gpu/onnx_models_op12/"
     model.eval()
     inputs = torch.randn(1, 3, 640, 640, dtype=torch.float)
     torch.onnx.export(
@@ -325,6 +325,7 @@ def generate_onnx_model(config, config_count):
         export_params=True,
         do_constant_folding=True,
         verbose=True,
+        opset_version=12,
         input_names=["inputs"], 
         output_names=["outputs"]
         )

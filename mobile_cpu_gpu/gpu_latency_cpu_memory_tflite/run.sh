@@ -1,5 +1,5 @@
 #!/bin/bash
-python onnx2tflite.py
+# python onnx2tflite.py
 export device="417d6d91"    # 小米12在linux下的adb设备号
 export device_dir="/data/local/tmp/pbmg"
 export local_dir="/home/sunyi/Documents/AIOT/PBMG/Prompt-based-Model-Generation/mobile_cpu_gpu/gpu_latency_cpu_memory_tflite"
@@ -16,10 +16,11 @@ do
     adb -s $device shell "chmod +x $device_dir/android_aarch64_benchmark_model"
     adb -s $device shell ".$device_dir/android_aarch64_benchmark_model \
     --graph=$device_dir/models/$i.tflite  --warmup_runs=5 --num_runs=5 \
-    --num_threads=4 --use_gpu=true --enable_op_profiling=true \
-    --profiling_output_csv_file=$device_dir/results/$i.csv \
-    --report_peak_memory_footprint=true --memory_footprint_check_interval_ms=10 > $device_dir/results/$i.txt" 
-    adb -s $device pull --sync $device_dir/results/ $local_dir/data/
+    --num_threads=4  --enable_op_profiling=true \
+    --report_peak_memory_footprint=true --memory_footprint_check_interval_ms=10 \
+    --profiling_output_csv_file=$device_dir/results/$i.csv  > $device_dir/results/$i.txt" 
+    # --use_gpu=true
+    adb -s $device pull --sync $device_dir/results/ $local_dir/data/cpu_memory/
     adb -s $device shell "rm -rf $device_dir/models/*"
     adb -s $device shell "rm -rf $device_dir/results/*"
 done

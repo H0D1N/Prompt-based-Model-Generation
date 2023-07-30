@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 runs = 3000
-ratio = 0.7  # 80% of the data is used for training, and 20% is used for testing
+ratio = 0.8  # 80% of the data is used for training, and 20% is used for testing
 slice_num = int(runs * ratio)  # 800
 
 # fig = plt.figure()
@@ -344,12 +344,12 @@ slice_num = int(runs * ratio)  # 800
 
 ################################### predictor using all 38 configs #################################
 configs_train = np.ones((slice_num, 39))
-model_latency_train = np.zeros((slice_num,1))
+model_latency_train = np.zeros((slice_num, 1))
 configs_valid = np.ones((runs-slice_num, 39))
 model_latency_valid = np.zeros((runs-slice_num,1))
 
 for file_num in range(1, 19):
-    file_path = "data/modeling/batch_1/module_" + str(file_num) + ".txt"
+    file_path = "data/latency/batch_1/module_" + str(file_num) + ".txt"
     # Read data from the TXT file and ignore the first line
     with open(file_path, "r") as file:
         lines = file.readlines()[1:(runs + 1)]
@@ -389,6 +389,9 @@ A2 = np.linalg.inv(A1)
 A3 = np.dot(A2, configs_train_T)
 X = np.dot(A3, model_latency_train)
 
+coefficients_list = [X[0, 0], X[1, 0], X[2, 0], X[3, 0], X[4, 0], X[5, 0], X[6, 0], X[7, 0], X[8, 0], X[9, 0], X[10, 0], X[11, 0], X[12, 0], X[13, 0], X[14, 0], X[15, 0], X[16, 0], X[17, 0], X[18, 0], X[19, 0], X[20, 0], X[21, 0], X[22, 0], X[23, 0], X[24, 0], X[25, 0], X[26, 0], X[27, 0], X[28, 0], X[29, 0], X[30, 0], X[31, 0], X[32, 0], X[33, 0], X[34, 0], X[35, 0], X[36, 0], X[37, 0]]
+print('coefficients_list:\n', coefficients_list)
+
 print('38 configs的多元一次方程平面拟合结果为: z = %.3f * config_1 + %.3f * config_2 + %.3f * config_3 + %.3f * config_4 + %.3f * config_5 + %.3f * config_6 + %.3f * config_7 + %.3f * config_8 + %.3f * config_9 + %.3f * config_10 + %.3f * config_11 + %.3f * config_12 + %.3f * config_13 + %.3f * config_14 + %.3f * config_15 + %.3f * config_16 + %.3f * config_17 + %.3f * config_18 + %.3f * config_19 + %.3f * config_20 + %.3f * config_21 + %.3f * config_22 + %.3f * config_23 + %.3f * config_24 + %.3f * config_25 + %.3f * config_26 + %.3f * config_27 + %.3f * config_28 + %.3f * config_29 + %.3f * config_30 + %.3f * config_31 + %.3f * config_32 + %.3f * config_33 + %.3f * config_34 + %.3f * config_35 + %.3f * config_36 + %.3f * config_37 + %.3f' % 
     (X[0, 0], X[1, 0], X[2, 0], X[3, 0], X[4, 0], X[5, 0], X[6, 0], X[7, 0], X[8, 0], X[9, 0], X[10, 0], X[11, 0], X[12, 0], X[13, 0], X[14, 0], X[15, 0], X[16, 0], X[17, 0], X[18, 0], X[19, 0], X[20, 0], X[21, 0], X[22, 0], X[23, 0], X[24, 0], X[25, 0], X[26, 0], X[27, 0], X[28, 0], X[29, 0], X[30, 0], X[31, 0], X[32, 0], X[33, 0], X[34, 0], X[35, 0], X[36, 0], X[37, 0]))
 model_latency_predict = np.dot(configs_valid, X)
@@ -405,7 +408,7 @@ fig, ax = plt.subplots()
 ax.tick_params(axis='both', labelsize=12)
 # Generating x-axis values using the range function
 x_values = list(range(1, len(model_latency_acc) + 1))
-plt.plot(x_values, model_latency_acc, marker='o', color='blue')
+plt.plot(x_values, model_latency_acc, marker='o', color='blue', linewidth=0.5, markersize=3)
 plt.xlabel('run period', fontsize=12)
 plt.ylabel('model latency acc', fontsize=12)
 plt.title('Model Latency Accuracy and Statistics (using all 38 configs)', fontsize=12)
@@ -414,7 +417,7 @@ plt.title('Model Latency Accuracy and Statistics (using all 38 configs)', fontsi
 x_coord = min(x_values)  # Using the leftmost x-coordinate
 y_coord = min(model_latency_acc)  # Using the lowest y-coordinate
 plt.text(x_coord, y_coord, f'acc avg: {model_latency_avg_acc:.3f}', fontsize=12)
-plt.text(x_coord + 100, y_coord, f'acc std: {model_latency_std_acc:.3f}', fontsize=12)
+plt.text(x_coord + 400, y_coord, f'acc std: {model_latency_std_acc:.3f}', fontsize=12)
 
 plt.grid(True)
 plt.tight_layout()  # To improve spacing

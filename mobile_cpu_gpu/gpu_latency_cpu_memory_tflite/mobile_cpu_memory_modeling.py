@@ -1,85 +1,60 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-
+import re
 runs = 1000
 ratio = 0.8  # 80% of the data is used for training, and 20% is used for testing
 slice_num = int(runs * ratio)  # 800
 
-# 创建一个空列表来存储Self CPU Mem值
-Self_CPU_Mem_values = []
 
-# 读取1000个txt文件
-for i in range(1000):
-    filename = f"data/memory/batch_1/raw_data/run_No.{i}.txt"
-    try:
-        with open(filename, "r") as file:
-            # 逐行读取文件内容
-            for line in file:
-                # 使用正则表达式匹配包含"ProfilerStep*"的行
-                if "ProfilerStep*" in line:
-                    # 使用空格分割行的内容
-                    values = line.split()
-                    if len(values) >= 2:  # 按照大于等于2个空格划分
-                        try:
-                            Self_CPU_Mem = abs(float(values[8]))
-                            Self_CPU_Mem_values.append(Self_CPU_Mem)
-                        except ValueError:
-                            print(f"文件 {filename} 中的Self CPU Mem值无效。")
-                    else:
-                        print(f"文件 {filename} 中的行格式不正确。")
-                    break  # 停止查找其他行，因为我们只关心第一个匹配项
+# 用于存储1000个值的列表
+peak_memory_footprint = []
 
-    except FileNotFoundError:
-        # 如果文件不存在，可以做一些处理或记录
-        print(f"文件 {filename} 未找到。")
+# 处理从1.txt到1000.txt的文件
+for file_number in range(1, 1001):
+    file_path = f"data/cpu_memory/results/{file_number}.txt"
 
-# 打印Self CPU Mem值列表
-print('Self CPU Mem值列表:')
-print(Self_CPU_Mem_values)
+    with open(file_path, 'r') as file:
+        log = file.read()
+    # 使用正则表达式匹配目标值
+    match = re.search(r'Overall peak memory footprint \(MB\) via periodic monitoring: ([\d.]+)', log)
+
+    # 提取目标值
+    if match:
+        peak_memory_footprint.append(float(match.group(1)))
+        #print("提取的Overall peak memory footprint值:", peak_memory_footprint)
+    else:
+        print("未找到目标值")
+
+print("Overall peak memory footprint (MB):\n", peak_memory_footprint)
 print()
 
 ################################### memory predictor using all 38 configs #################################
+# configs_train = np.ones((slice_num, 39))
+# configs_valid = np.ones((runs - slice_num, 39))
+#
+model_memory_train = np.array(peak_memory_footprint[:slice_num]).reshape(slice_num, 1)  # 将前800个元素作为训练集
+model_memory_valid = np.array(peak_memory_footprint[slice_num:]).reshape(runs - slice_num, 1)  # 将后200个元素作为测试集
+
+
+
+# 初始化configs_train和configs_valid
 configs_train = np.ones((slice_num, 39))
 configs_valid = np.ones((runs - slice_num, 39))
 
-model_memory_train = np.array(Self_CPU_Mem_values[:slice_num]).reshape(slice_num, 1)  # 将前800个元素作为训练集
-model_memory_valid = np.array(Self_CPU_Mem_values[slice_num:]).reshape(runs - slice_num, 1)  # 将后200个元素作为测试集
-
-
-for file_num in range(1, 19):
-    file_path = "data/memory/batch_1/latency/module_" + str(file_num) + ".txt"
-    # Read data from the TXT file and ignore the first line
-    with open(file_path, "r") as file:
-        lines = file.readlines()[1:(runs + 1)]
-    for count, line in enumerate(lines):
-        data = line.strip().split()
-        if count < slice_num:
-            if file_num < 17:
-                configs_train[count][file_num * 2 - 2] = float(data[0])
-                configs_train[count][file_num * 2 - 1] = float(data[1])
-            elif file_num == 17:
-                configs_train[count][32] = float(data[0])
-                configs_train[count][33] = float(data[1])
-                configs_train[count][34] = float(data[2])
-            else:
-                configs_train[count][35] = float(data[0])
-                configs_train[count][36] = float(data[1])
-                configs_train[count][37] = float(data[2])
-
-
+# 从configs.txt文件中提取数值并赋值给configs_train和configs_valid
+with open("../onnx_models_op12/configs.txt", 'r') as file:
+    for i, line in enumerate(file):
+        # 将每一行的前38个数值赋值给configs_train和configs_valid的前38列
+        values = list(map(float, line.strip().split()[:38]))
+        if i < slice_num:
+            configs_train[i, :38] = np.array(values)
         else:
-            if file_num < 17:
-                configs_valid[count - slice_num][file_num * 2 - 2] = float(data[0])
-                configs_valid[count - slice_num][file_num * 2 - 1] = float(data[1])
-            elif file_num == 17:
-                configs_valid[count - slice_num][32] = float(data[0])
-                configs_valid[count - slice_num][33] = float(data[1])
-                configs_valid[count - slice_num][34] = float(data[2])
-            else:
-                configs_valid[count - slice_num][35] = float(data[0])
-                configs_valid[count - slice_num][36] = float(data[1])
-                configs_valid[count - slice_num][37] = float(data[2])
+            configs_valid[i - slice_num, :38] = np.array(values)
+
+    # 打印结果（可选）
+    print("configs_train:\n", configs_train)
+    print("configs_valid:\n", configs_valid)
 
 configs_train_T = configs_train.T
 A1 = np.dot(configs_train_T, configs_train)

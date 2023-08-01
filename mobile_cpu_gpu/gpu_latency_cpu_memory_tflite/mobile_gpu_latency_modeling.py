@@ -18,7 +18,7 @@ for file_number in range(1, 1001):
     with open(file_path, 'r') as file:
         log = file.read()
     # 使用正则表达式匹配目标值
-    match = re.search(r'Inference \(avg\): (\d+)', log)
+    match = re.search(r'Inference \(avg\): ([+-]?\d+(\.\d*)?(e[+-]?\d+)?)', log)
 
     # 提取目标值
     if match:

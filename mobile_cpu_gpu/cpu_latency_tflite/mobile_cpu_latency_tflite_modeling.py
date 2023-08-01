@@ -1,30 +1,39 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import re
+from mpl_toolkits.mplot3d import Axes3D
+
 runs = 1000
 ratio = 0.8  # 80% of the data is used for training, and 20% is used for testing
 slice_num = int(runs * ratio)  # 800
 
 
-################################### latency predictor using all 38 configs #################################
+# 用于存储1000个avg值的列表
+avg_Inference = []
 
-# 初始化model_latency_train和model_latency_valid
-model_latency_train = np.zeros((slice_num, 1))
-model_latency_valid = np.zeros((runs-slice_num, 1))
+# 处理从1.txt到1000.txt的文件
+for file_number in range(1, 1001):
+    file_path = f"data/results/{file_number}.txt"
 
-# 从configs.txt文件中提取数值并赋值给model_latency_train和model_latency_valid
-with open("data/latency_time.txt", 'r') as file:
-    for i, line in enumerate(file):
-        # 将每一行的第39列数值赋值给configs_train和configs_valid
-        values = list(map(float, line.strip().split()[38:]))
-        if i < slice_num:
-            model_latency_train[i, 0] = np.array(values)
-        else:
-            model_latency_valid[i - slice_num, 0] = np.array(values)
-    # 打印结果（可选）
-    print("configs_train:\n", model_latency_train)
-    print("configs_valid:\n", model_latency_valid)
+    with open(file_path, 'r') as file:
+        log = file.read()
+    # 使用正则表达式匹配目标值
+    match = re.search(r'Inference \(avg\): ([+-]?\d+(\.\d*)?(e[+-]?\d+)?)', log)
+
+    # 提取目标值
+    if match:
+        avg_Inference.append(float(match.group(1)))
+
+    else:
+        print("未找到目标值")
+
+print("avg_Inference (us):\n", avg_Inference)
+print()
+
+################################### memory predictor using all 38 configs #################################
+
+model_latency_train = np.array(avg_Inference[:slice_num]).reshape(slice_num, 1)  # 将前800个元素作为训练集
+model_latency_valid = np.array(avg_Inference[slice_num:]).reshape(runs - slice_num, 1)  # 将后200个元素作为测试集
 
 
 # 初始化configs_train和configs_valid
@@ -32,7 +41,7 @@ configs_train = np.ones((slice_num, 39))
 configs_valid = np.ones((runs - slice_num, 39))
 
 # 从configs.txt文件中提取数值并赋值给configs_train和configs_valid
-with open("data/latency_time.txt", 'r') as file:
+with open("../onnx_models_op12/configs.txt", 'r') as file:
     for i, line in enumerate(file):
         # 将每一行的前38个数值赋值给configs_train和configs_valid的前38列
         values = list(map(float, line.strip().split()[:38]))
@@ -88,4 +97,3 @@ plt.text(x_coord + 100, y_coord, f'acc std: {model_latency_std_acc:.3f}', fontsi
 plt.grid(True)
 plt.tight_layout()  # To improve spacing
 plt.show()
-

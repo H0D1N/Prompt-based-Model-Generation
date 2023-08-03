@@ -97,3 +97,21 @@ plt.text(x_coord + 100, y_coord, f'acc std: {model_latency_std_acc:.3f}', fontsi
 plt.grid(True)
 plt.tight_layout()  # To improve spacing
 plt.show()
+
+
+############################## box_plot #####################################
+print("model_latency_acc is:\n", model_latency_acc)
+# Save model_latency_acc to a TXT file
+np.savetxt('../../box_plot/box_plot_data/mobile_gpu_tflite_model_latency_acc.txt', model_latency_acc)
+
+# Plotting the boxplot of model_latency_acc
+# fig, ax = plt.subplots()
+# ax.tick_params(axis='both', labelsize=12)
+plt.boxplot(model_latency_acc, sym='+')
+plt.xlabel('mobile_gpu_tflite', fontsize=12)
+plt.ylabel('model latency acc', fontsize=12)
+plt.title('Boxplot of Model Latency Accuracy (using all 38 configs)', fontsize=12)
+
+plt.grid(True)
+plt.tight_layout()  # To improve spacing
+plt.show()

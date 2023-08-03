@@ -124,3 +124,20 @@ plt.text(x_coord + 100, y_coord, f'acc std: {model_memory_std_acc:.3f}', fontsiz
 plt.grid(True)
 plt.tight_layout()  # To improve spacing
 plt.show()
+
+############################## box_plot #####################################
+print("model_memory_acc is:\n", model_memory_acc)
+# Save model_latency_acc to a TXT file
+np.savetxt('../box_plot/box_plot_data/server_cpu_model_memory_acc.txt', model_memory_acc)
+
+# Plotting the boxplot of model_latency_acc
+# fig, ax = plt.subplots()
+# ax.tick_params(axis='both', labelsize=12)
+plt.boxplot(model_memory_acc, sym='+')
+plt.xlabel('server cpu', fontsize=12)
+plt.ylabel('model memory acc', fontsize=12)
+plt.title('Boxplot of Model Memory Accuracy (using all 38 configs)', fontsize=12)
+
+plt.grid(True)
+plt.tight_layout()  # To improve spacing
+plt.show()

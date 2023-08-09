@@ -90,11 +90,11 @@ data = [
 
 # Device labels for the x-axis
 devices = [
-    'server_cpu_time()',
-    'jetson_cpu_pytorch_profiler',
-    'jetson_gpu_pytorch_profiler',
-    'mobile_cpu_tflite',
-    'mobile_gpu_tflite',
+    'Desktop CPU',
+    'Jetson CPU',
+    'Jetson GPU',
+    'Mobile CPU',
+    'Mobile GPU',
 ]
 
 # Create the figure and axes
@@ -103,11 +103,11 @@ fig, ax = plt.subplots()
 ax.boxplot(data, sym='+', positions=range(1, len(data) + 1))
 # Set x-axis labels
 ax.set_xticks(range(1, len(devices) + 1))
-ax.set_xticklabels(devices, rotation=45, fontsize=10)
+ax.set_xticklabels(devices, rotation=45, fontsize=12)
 # Set y-axis label
-ax.set_ylabel('model latency acc', fontsize=12)
+ax.set_ylabel('Latency Prediction Acc', fontsize=12)
 # Set title
-ax.set_title('Boxplot of Model Latency Accuracy (using all 38 configs)', fontsize=12)
+# ax.set_title('Boxplot of Model Latency Accuracy (using all 38 configs)', fontsize=12)
 # Show the grid
 ax.grid(True)
 # To improve spacing
@@ -172,9 +172,9 @@ data = [
 
 # Device labels for the x-axis
 devices = [
-    'server_cpu_pytorch_profiler',
-    'jetson_cpu_pytorch_profiler',
-    'mobile_cpu_tflite',
+    'Desktop CPU',
+    'Jetson CPU',
+    'Mobile CPU',
 ]
 
 # Create the figure and axes
@@ -185,13 +185,13 @@ ax.boxplot(data, sym='+', positions=range(1, len(data) + 1))
 
 # Set x-axis labels
 ax.set_xticks(range(1, len(devices) + 1))
-ax.set_xticklabels(devices, rotation=45, fontsize=10)
+ax.set_xticklabels(devices, rotation=45, fontsize=12)
 
 # Set y-axis label
-ax.set_ylabel('model memory acc', fontsize=12)
+ax.set_ylabel('Memory Prediction Acc', fontsize=12)
 
 # Set title
-ax.set_title('Boxplot of Model Memory Accuracy (using all 38 configs)', fontsize=12)
+# ax.set_title('Boxplot of Model Memory Accuracy (using all 38 configs)', fontsize=12)
 
 # Show the grid
 ax.grid(True)

@@ -103,9 +103,11 @@ fig, ax = plt.subplots()
 ax.boxplot(data, sym='+', positions=range(1, len(data) + 1))
 # Set x-axis labels
 ax.set_xticks(range(1, len(devices) + 1))
-ax.set_xticklabels(devices, rotation=45, fontsize=12)
+ax.set_xticklabels(devices, rotation=30, fontsize=16)
 # Set y-axis label
-ax.set_ylabel('Latency Prediction Acc', fontsize=12)
+ax.set_ylabel('Latency Prediction Acc', fontsize=20)
+ax.tick_params(axis='y', labelsize=20)
+
 # Set title
 # ax.set_title('Boxplot of Model Latency Accuracy (using all 38 configs)', fontsize=12)
 # Show the grid
@@ -185,11 +187,11 @@ ax.boxplot(data, sym='+', positions=range(1, len(data) + 1))
 
 # Set x-axis labels
 ax.set_xticks(range(1, len(devices) + 1))
-ax.set_xticklabels(devices, rotation=45, fontsize=12)
+ax.set_xticklabels(devices, rotation=30, fontsize=16)
 
 # Set y-axis label
-ax.set_ylabel('Memory Prediction Acc', fontsize=12)
-
+ax.set_ylabel('Memory Prediction Acc', fontsize=20)
+ax.tick_params(axis='y', labelsize=20)
 # Set title
 # ax.set_title('Boxplot of Model Memory Accuracy (using all 38 configs)', fontsize=12)
 

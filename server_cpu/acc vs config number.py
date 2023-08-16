@@ -40,9 +40,13 @@ for train_size in train_data_sizes:
 
 # Create the plot
 plt.figure()
-plt.plot(train_data_sizes, accuracy_values, marker='o', color='orange')
-plt.xlabel('Number of Random Configurations Generated', fontsize=12)
-plt.ylabel('Latency Prediction Acc', fontsize=12)
+plt.figure(figsize=(10, 7))  # Increase figure size
+plt.plot(train_data_sizes, accuracy_values, marker='o', markersize=10, color='orange', linewidth=4)
+plt.xlabel('Number of Random Configurations Generated', fontsize=26)
+plt.ylabel('Latency Prediction Acc', fontsize=26)
+# Set the font size of x and y axis tick labels
+plt.xticks(fontsize=26)
+plt.yticks(fontsize=26)
 # plt.title('Effect of Training Data Size on Model Latency Accuracy', fontsize=12)
 plt.grid(True)
 plt.tight_layout()  # To improve spacing

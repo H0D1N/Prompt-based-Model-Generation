@@ -2,7 +2,7 @@
 # python onnx2tflite.py
 export device="417d6d91"    # 小米12在linux下的adb设备号
 export device_dir="/data/local/tmp/pbmg"
-export local_dir="/home/sunyi/Documents/AIOT/PBMG/Prompt-based-Model-Generation/mobile_cpu_gpu/gpu_memory"
+export local_dir="/home/sunyi/Documents/AIOT/PBMG/Prompt-based-Model-Generation/Mobile_cpu_gpu/gpu_memory"
 
 adb -s $device shell "mkdir -p $device_dir/models $device_dir/results"
 adb -s $device push --sync $local_dir/android_aarch64_benchmark_model $device_dir

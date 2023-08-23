@@ -1,0 +1,498 @@
+Profiling Info for Benchmark Initialization:
+============================== Run Order ==============================
+node type, first, avg_ms, %, cdf%, mem KB, times called, name
+ModifyGraphWithDelegate, 1439.29, 733.681, 98.9697%, 98.9697%, 0, 2, ModifyGraphWithDelegate/0
+AllocateTensors, 1.848, 7.638, 1.03033%, 100%, 0, 2, AllocateTensors/0
+
+============================== Top by Computation Time ==============================
+node type, first, avg_ms, %, cdf%, mem KB, times called, name
+ModifyGraphWithDelegate, 1439.29, 733.681, 98.9697%, 98.9697%, 0, 2, ModifyGraphWithDelegate/0
+AllocateTensors, 1.848, 7.638, 1.03033%, 100%, 0, 2, AllocateTensors/0
+
+Number of nodes executed: 2
+============================== Summary by node type ==============================
+node type, count, avg_ms, avg %, cdf %, mem KB, times called
+ModifyGraphWithDelegate, 1, 1467.36, 98.9697%, 98.9697%, 0, 2
+AllocateTensors, 1, 15.276, 1.03033%, 100%, 0, 2
+
+Timings (microseconds): count=1 curr=1482637
+Memory (bytes): count=0
+2 nodes observed
+
+
+Operator-wise Profiling Info for Regular Benchmark Runs:
+============================== Run Order ==============================
+node type, first, avg_ms, %, cdf%, mem KB, times called, name
+CONV_2D, 0.022, 0.0216, 0.0050907%, 0.0050907%, 0, 1, [Add_234;convolution_94;convolution_110;Const_1]:629
+CONV_2D, 0.014, 0.0148, 0.00348808%, 0.00857878%, 0, 1, [convolution_130]:643
+CONV_2D, 0.027, 0.0566, 0.0133395%, 0.0219183%, 0, 1, [onnx_tf_prefix_/class_net/act_14/Relu;convolution_109]:625
+CONV_2D, 0.015, 0.0144, 0.0033938%, 0.0253121%, 0, 1, [onnx_tf_prefix_/box_net/act_14/Relu;convolution_129]:639
+CONV_2D, 0.028, 0.0274, 0.00645765%, 0.0317698%, 0, 1, [onnx_tf_prefix_/class_net/act_13/Relu;convolution_108]:621
+Transpose (ND, X32), 0.003, 0.0022, 0.000518498%, 0.0322883%, 0, 1, Delegate/Transpose (ND	 X32):10
+Constant Pad (ND, X32), 0.006, 0.0058, 0.00136695%, 0.0336552%, 0, 1, Delegate/Constant Pad (ND	 X32):8
+Transpose (ND, X32), 0, 0, 0%, 0.0336552%, 0, 1, Delegate/Transpose (ND	 X32):7
+Convolution (NHWC, F32) IGEMM, 0.003, 0.003, 0.000707042%, 0.0343623%, 0, 1, Delegate/Convolution (NHWC	 F32) IGEMM:6
+CONV_2D, 0.059, 0.0576, 0.0135752%, 0.0479375%, 0, 1, [Add_230;convolution_94;convolution_106;Const_1]:659
+CONV_2D, 0.01, 0.0128, 0.00301671%, 0.0509542%, 0, 1, [onnx_tf_prefix_/box_net/act_12/Relu;convolution_127]:631
+CONV_2D, 0.061, 0.461, 0.108649%, 0.159603%, 0, 1, [onnx_tf_prefix_/class_net/act_12/Relu;convolution_107]:617
+CONV_2D, 0.032, 0.0348, 0.00820169%, 0.167805%, 0, 1, [convolution_126]:673
+CONV_2D, 0.066, 0.0656, 0.0154607%, 0.183265%, 0, 1, [onnx_tf_prefix_/class_net/act_11/Relu;convolution_105]:655
+CONV_2D, 0.089, 0.0702, 0.0165448%, 0.19981%, 0, 1, [convolution_902]:613
+CONV_2D, 0.035, 0.0366, 0.00862592%, 0.208436%, 0, 1, [onnx_tf_prefix_/box_net/act_11/Relu;convolution_125]:669
+CONV_2D, 0.059, 0.0772, 0.0181946%, 0.226631%, 0, 1, [onnx_tf_prefix_/class_net/act_10/Relu;convolution_104]:651
+SUM, 0.013, 0.0132, 0.00311099%, 0.229742%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.3/fnode.7/combine/ReduceSum_1]:609
+CONV_2D, 0.082, 0.0806, 0.0189959%, 0.248737%, 0, 1, [Add_226;convolution_94;convolution_102;Const_1]:689
+CONV_2D, 0.025, 0.0268, 0.00631624%, 0.255054%, 0, 1, [onnx_tf_prefix_/box_net/act_9/Relu;convolution_123]:661
+CONV_2D, 0.1, 0.154, 0.0362948%, 0.291349%, 0, 1, [onnx_tf_prefix_/class_net/act_9/Relu;convolution_103]:647
+PADV2, 0.008, 0.0106, 0.00249822%, 0.293847%, 0, 1, [PadV2_18]:602
+CONV_2D, 0.086, 0.1028, 0.024228%, 0.318075%, 0, 1, [convolution_122]:703
+CONV_2D, 0.146, 0.1458, 0.0343623%, 0.352437%, 0, 1, [onnx_tf_prefix_/class_net/act_8/Relu;convolution_101]:685
+CONV_2D, 0.126, 0.169, 0.03983%, 0.392267%, 0, 1, [convolution_891]:600
+CONV_2D, 0.107, 0.0654, 0.0154135%, 0.407681%, 0, 1, [onnx_tf_prefix_/box_net/act_8/Relu;convolution_121]:699
+CONV_2D, 0.165, 0.151, 0.0355878%, 0.443268%, 0, 1, [onnx_tf_prefix_/class_net/act_7/Relu;convolution_100]:681
+SUM, 0.039, 0.0416, 0.00980432%, 0.453073%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.3/fnode.6/combine/ReduceSum_1]:596
+CONV_2D, 0.467, 0.372, 0.0876732%, 0.540746%, 0, 1, [Add_222;convolution_94;convolution_98;Const_1]:719
+CONV_2D, 0.227, 0.2056, 0.048456%, 0.589202%, 0, 1, [onnx_tf_prefix_/box_net/act_6/Relu;convolution_119]:691
+CONV_2D, 0.39, 0.3314, 0.0781046%, 0.667306%, 0, 1, [onnx_tf_prefix_/class_net/act_6/Relu;convolution_99]:677
+PADV2, 0.027, 0.021, 0.0049493%, 0.672256%, 0, 1, [PadV2_17]:589
+CONV_2D, 0.43, 0.4392, 0.103511%, 0.775767%, 0, 1, [convolution_118]:733
+CONV_2D, 0.799, 0.709, 0.167098%, 0.942864%, 0, 1, [onnx_tf_prefix_/class_net/act_5/Relu;convolution_97]:715
+CONV_2D, 0.417, 0.4128, 0.097289%, 1.04015%, 0, 1, [convolution_881]:587
+CONV_2D, 0.299, 0.2962, 0.0698086%, 1.10996%, 0, 1, [onnx_tf_prefix_/box_net/act_5/Relu;convolution_117]:729
+CONV_2D, 0.732, 0.7518, 0.177185%, 1.28715%, 0, 1, [onnx_tf_prefix_/class_net/act_4/Relu;convolution_96]:711
+SUM, 0.209, 0.2298, 0.0541594%, 1.34131%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.3/fnode.5/combine/ReduceSum_1]:583
+Transpose (ND, X32), 0.007, 0.0038, 0.00268676%, 1.34399%, 0, 3, Delegate/Transpose (ND	 X32):16
+CONV_2D, 1.594, 1.6394, 0.386375%, 1.73037%, 0, 1, [Add_218;convolution_94;Const_1]:749
+CONV_2D, 0.807, 0.7634, 0.179919%, 1.91029%, 0, 1, [onnx_tf_prefix_/box_net/act_3/Relu;convolution_115]:721
+CONV_2D, 1.783, 1.8694, 0.440582%, 2.35087%, 0, 1, [onnx_tf_prefix_/class_net/act_3/Relu;convolution_95]:707
+PADV2, 0.063, 0.0598, 0.0140937%, 2.36496%, 0, 1, [PadV2_16]:576
+CONV_2D, 1.365, 1.4366, 0.338579%, 2.70354%, 0, 1, [convolution_1142]:763
+CONV_2D, 1.909, 1.9866, 0.468203%, 3.17174%, 0, 1, [onnx_tf_prefix_/class_net/act_2/Relu;convolution_93]:745
+CONV_2D, 1.848, 1.8792, 0.442891%, 3.61464%, 0, 1, [convolution_871]:574
+Transpose (ND, X32), 0.05, 0.02114, 0.0498229%, 3.66446%, 0, 10, Delegate/Transpose (ND	 X32):5
+Constant Pad (ND, X32), 0.039, 0.0307, 0.072354%, 3.73681%, 0, 10, Delegate/Constant Pad (ND	 X32):4
+CONV_2D, 0.86, 0.9322, 0.219702%, 3.95651%, 0, 1, [onnx_tf_prefix_/box_net/act_2/Relu;convolution_113]:759
+CONV_2D, 2.692, 3.032, 0.714584%, 4.6711%, 0, 1, [onnx_tf_prefix_/class_net/act_1/Relu;convolution_92]:741
+SUM, 0.656, 0.849, 0.200093%, 4.87119%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.3/fnode.4/combine/ReduceSum_1]:570
+Transpose (ND, X32), 0.035, 0.01135, 0.0106999%, 4.88189%, 0, 4, Delegate/Transpose (ND	 X32):15
+Constant Pad (ND, X32), 0.02, 0.00855, 0.00806028%, 4.88995%, 0, 4, Delegate/Constant Pad (ND	 X32):14
+Transpose (ND, X32), 0.012, 0.0045, 0.00424225%, 4.89419%, 0, 4, Delegate/Transpose (ND	 X32):13
+Convolution (NHWC, F32) IGEMM, 0.099, 0.03225, 0.0304028%, 4.9246%, 0, 4, Delegate/Convolution (NHWC	 F32) IGEMM:12
+Transpose (ND, X32), 0.006, 0.00255, 0.00240394%, 4.927%, 0, 4, Delegate/Transpose (ND	 X32):11
+Constant Pad (ND, X32), 0.012, 0.00425, 0.00400657%, 4.93101%, 0, 4, Delegate/Constant Pad (ND	 X32):10
+Transpose (ND, X32), 0.012, 0.00368, 0.00433653%, 4.93534%, 0, 5, Delegate/Transpose (ND	 X32):9
+Transpose (ND, X32), 0.148, 0.030925, 0.0583074%, 4.99365%, 0, 8, Delegate/Transpose (ND	 X32):8
+Constant Pad (ND, X32), 0.124, 0.037475, 0.0706571%, 5.06431%, 0, 8, Delegate/Constant Pad (ND	 X32):7
+Transpose (ND, X32), 0.201, 0.0377333, 0.106716%, 5.17102%, 0, 12, Delegate/Transpose (ND	 X32):6
+CONV_2D, 2.515, 2.6014, 0.6131%, 5.78412%, 0, 1, [onnx_tf_prefix_/box_net/act/Relu;convolution_111]:751
+CONV_2D, 8.257, 7.7004, 1.81484%, 7.59896%, 0, 1, [onnx_tf_prefix_/class_net/act/Relu;convolution_91]:737
+PADV2, 0.161, 0.1638, 0.0386045%, 7.63756%, 0, 1, [PadV2_15]:563
+CONV_2D, 9.205, 9.0146, 2.12457%, 9.76213%, 0, 1, [convolution_861]:561
+SUM, 2.173, 3.0254, 0.713029%, 10.4752%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.3/fnode.3/combine/ReduceSum_1]:557
+RESIZE_NEAREST_NEIGHBOR, 0.078, 0.102, 0.0240394%, 10.4992%, 0, 1, [ResizeNearestNeighbor_15]:548
+CONV_2D, 2.237, 2.1504, 0.506808%, 11.006%, 0, 1, [convolution_851]:544
+SUM, 0.511, 0.6758, 0.159273%, 11.1653%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.3/fnode.2/combine/ReduceSum_1]:540
+RESIZE_NEAREST_NEIGHBOR, 0.019, 0.0202, 0.00476075%, 11.17%, 0, 1, [ResizeNearestNeighbor_14]:531
+CONV_2D, 0.436, 0.4552, 0.107282%, 11.2773%, 0, 1, [convolution_841]:527
+SUM, 0.129, 0.1432, 0.0337495%, 11.3111%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.3/fnode.1/combine/ReduceSum_1]:523
+RESIZE_NEAREST_NEIGHBOR, 0.006, 0.0068, 0.00160263%, 11.3127%, 0, 1, [ResizeNearestNeighbor_13]:514
+CONV_2D, 0.15, 0.1536, 0.0362006%, 11.3489%, 0, 1, [convolution_831]:510
+SUM, 0.035, 0.0502, 0.0118312%, 11.3607%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.3/fnode.0/combine/ReduceSum_1]:506
+RESIZE_NEAREST_NEIGHBOR, 0.003, 0.0036, 0.000848451%, 11.3616%, 0, 1, [ResizeNearestNeighbor_12]:499
+CONV_2D, 0.086, 0.0858, 0.0202214%, 11.3818%, 0, 1, [convolution_821]:495
+SUM, 0.011, 0.0118, 0.00278103%, 11.3846%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.2/fnode.7/combine/ReduceSum_1]:491
+PADV2, 0.008, 0.0114, 0.00268676%, 11.3872%, 0, 1, [PadV2_14]:484
+CONV_2D, 0.165, 0.1614, 0.0380389%, 11.4253%, 0, 1, [convolution_812]:482
+SUM, 0.038, 0.0444, 0.0104642%, 11.4357%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.2/fnode.6/combine/ReduceSum_1]:478
+PADV2, 0.023, 0.0244, 0.00575061%, 11.4415%, 0, 1, [PadV2_13]:471
+CONV_2D, 0.591, 0.5536, 0.130473%, 11.572%, 0, 1, [convolution_801]:469
+SUM, 0.205, 0.205, 0.0483146%, 11.6203%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.2/fnode.5/combine/ReduceSum_1]:465
+PADV2, 0.049, 0.049, 0.0115484%, 11.6318%, 0, 1, [PadV2_12]:458
+CONV_2D, 2.218, 2.1524, 0.507279%, 12.1391%, 0, 1, [convolution_791]:456
+SUM, 0.81, 0.8592, 0.202497%, 12.3416%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.2/fnode.4/combine/ReduceSum_1]:452
+PADV2, 0.143, 0.151, 0.0355878%, 12.3772%, 0, 1, [PadV2_11]:445
+CONV_2D, 8.923, 8.5438, 2.01361%, 14.3908%, 0, 1, [convolution_781]:443
+SUM, 2.959, 3.1458, 0.741404%, 15.1322%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.2/fnode.3/combine/ReduceSum_1]:439
+RESIZE_NEAREST_NEIGHBOR, 0.103, 0.1038, 0.0244637%, 15.1567%, 0, 1, [ResizeNearestNeighbor_11]:430
+CONV_2D, 2.247, 2.1178, 0.499125%, 15.6558%, 0, 1, [convolution_771]:426
+SUM, 0.764, 0.7322, 0.172565%, 15.8284%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.2/fnode.2/combine/ReduceSum_1]:422
+pad 0, 0.263, 0.2634, 0.0620783%, 15.8904%, 0, 1, Delegate/pad 0:0
+transpose 1, 0.215, 0.2138, 0.0503885%, 15.9408%, 0, 1, Delegate/transpose 1:1
+convolution_2d 2 -> relu 3, 5.558, 5.557, 1.30968%, 17.2505%, 0, 1, Delegate/convolution_2d 2 -> relu 3:2
+transpose 4, 6.996, 6.9728, 1.64335%, 18.8939%, 0, 1, Delegate/transpose 4:3
+pad 5, 1.191, 1.188, 0.279989%, 19.1739%, 0, 1, Delegate/pad 5:4
+transpose 6, 1.348, 1.3562, 0.31963%, 19.4935%, 0, 1, Delegate/transpose 6:5
+pooling_2d 7, 0.864, 0.8606, 0.202827%, 19.6963%, 0, 1, Delegate/pooling_2d 7:6
+convolution_2d 8, 1.22, 1.2212, 0.287813%, 19.9841%, 0, 1, Delegate/convolution_2d 8:7
+convolution_2d 9 -> relu 10, 0.379, 0.3784, 0.0891816%, 20.0733%, 0, 1, Delegate/convolution_2d 9 -> relu 10:8
+transpose 11, 0.608, 0.6026, 0.142021%, 20.2153%, 0, 1, Delegate/transpose 11:9
+pad 12, 0.309, 0.308, 0.0725897%, 20.2879%, 0, 1, Delegate/pad 12:10
+transpose 13, 0.261, 0.2612, 0.0615598%, 20.3495%, 0, 1, Delegate/transpose 13:11
+convolution_2d 14 -> relu 15, 3.406, 3.3834, 0.797402%, 21.1469%, 0, 1, Delegate/convolution_2d 14 -> relu 15:12
+convolution_2d 16 -> add 17 -> relu 18, 1.178, 1.2166, 0.286729%, 21.4336%, 0, 1, Delegate/convolution_2d 16 -> add 17 -> relu 18:13
+convolution_2d 19 -> relu 20, 0.517, 0.6176, 0.145556%, 21.5792%, 0, 1, Delegate/convolution_2d 19 -> relu 20:14
+transpose 21, 0.07, 0.0714, 0.0168276%, 21.596%, 0, 1, Delegate/transpose 21:15
+pad 22, 0.049, 0.0498, 0.0117369%, 21.6077%, 0, 1, Delegate/pad 22:16
+transpose 23, 0.044, 0.0446, 0.0105114%, 21.6182%, 0, 1, Delegate/transpose 23:17
+convolution_2d 24 -> relu 25, 0.054, 0.0564, 0.0132924%, 21.6315%, 0, 1, Delegate/convolution_2d 24 -> relu 25:18
+convolution_2d 26 -> add 27 -> relu 28, 0.736, 0.8928, 0.210416%, 21.8419%, 0, 1, Delegate/convolution_2d 26 -> add 27 -> relu 28:19
+convolution_2d 29 -> relu 30, 1.432, 1.468, 0.345979%, 22.1879%, 0, 1, Delegate/convolution_2d 29 -> relu 30:20
+transpose 31, 0.348, 0.351, 0.0827239%, 22.2707%, 0, 1, Delegate/transpose 31:21
+pad 32, 0.252, 0.267, 0.0629268%, 22.3336%, 0, 1, Delegate/pad 32:22
+transpose 33, 0.201, 0.2046, 0.0482203%, 22.3818%, 0, 1, Delegate/transpose 33:23
+convolution_2d 34 -> relu 35, 1.307, 1.5176, 0.357669%, 22.7395%, 0, 1, Delegate/convolution_2d 34 -> relu 35:24
+convolution_2d 36 -> add 37 -> relu 38, 0.756, 0.9098, 0.214422%, 22.9539%, 0, 1, Delegate/convolution_2d 36 -> add 37 -> relu 38:25
+convolution_2d 39 -> relu 40, 1.931, 1.9324, 0.455429%, 23.4093%, 0, 1, Delegate/convolution_2d 39 -> relu 40:26
+transpose 41, 0.71, 0.7436, 0.175252%, 23.5846%, 0, 1, Delegate/transpose 41:27
+pad 42, 0.37, 0.3766, 0.0887574%, 23.6733%, 0, 1, Delegate/pad 42:28
+transpose 43, 0.313, 0.319, 0.0751822%, 23.7485%, 0, 1, Delegate/transpose 43:29
+convolution_2d 44 -> relu 45, 1.824, 1.9918, 0.469429%, 24.2179%, 0, 1, Delegate/convolution_2d 44 -> relu 45:30
+convolution_2d 46, 0.766, 0.7664, 0.180626%, 24.3986%, 0, 1, Delegate/convolution_2d 46:31
+convolution_2d 47 -> add 48 -> relu 49, 2.548, 2.576, 0.607114%, 25.0057%, 0, 1, Delegate/convolution_2d 47 -> add 48 -> relu 49:32
+convolution_2d 50 -> relu 51, 0.432, 0.4468, 0.105302%, 25.111%, 0, 1, Delegate/convolution_2d 50 -> relu 51:33
+transpose 52, 0.023, 0.0236, 0.00556207%, 25.1165%, 0, 1, Delegate/transpose 52:34
+pad 53, 0.027, 0.027, 0.00636338%, 25.1229%, 0, 1, Delegate/pad 53:35
+transpose 54, 0.023, 0.024, 0.00565634%, 25.1286%, 0, 1, Delegate/transpose 54:36
+convolution_2d 55 -> relu 56, 0.375, 0.3748, 0.0883331%, 25.2169%, 0, 1, Delegate/convolution_2d 55 -> relu 56:37
+convolution_2d 57 -> add 58 -> relu 59, 0.864, 0.8672, 0.204382%, 25.4213%, 0, 1, Delegate/convolution_2d 57 -> add 58 -> relu 59:38
+convolution_2d 60 -> relu 61, 1.006, 1.0062, 0.237142%, 25.6584%, 0, 1, Delegate/convolution_2d 60 -> relu 61:39
+transpose 62, 0.161, 0.162, 0.0381803%, 25.6966%, 0, 1, Delegate/transpose 62:40
+pad 63, 0.1, 0.1018, 0.0239923%, 25.7206%, 0, 1, Delegate/pad 63:41
+transpose 64, 0.086, 0.0858, 0.0202214%, 25.7408%, 0, 1, Delegate/transpose 64:42
+convolution_2d 65 -> relu 66, 2.128, 2.1324, 0.502566%, 26.2434%, 0, 1, Delegate/convolution_2d 65 -> relu 66:43
+convolution_2d 67 -> add 68 -> relu 69, 1.219, 1.2214, 0.28786%, 26.5312%, 0, 1, Delegate/convolution_2d 67 -> add 68 -> relu 69:44
+convolution_2d 70 -> relu 71, 0.496, 0.5058, 0.119207%, 26.6504%, 0, 1, Delegate/convolution_2d 70 -> relu 71:45
+transpose 72, 0.043, 0.043, 0.0101343%, 26.6606%, 0, 1, Delegate/transpose 72:46
+pad 73, 0.046, 0.0478, 0.0112655%, 26.6718%, 0, 1, Delegate/pad 73:47
+transpose 74, 0.044, 0.044, 0.01037%, 26.6822%, 0, 1, Delegate/transpose 74:48
+convolution_2d 75 -> relu 76, 0.296, 0.2956, 0.0696672%, 26.7519%, 0, 1, Delegate/convolution_2d 75 -> relu 76:49
+convolution_2d 77 -> add 78 -> relu 79, 0.396, 0.424, 0.0999286%, 26.8518%, 0, 1, Delegate/convolution_2d 77 -> add 78 -> relu 79:50
+convolution_2d 80, 1.006, 1.006, 0.237095%, 27.0889%, 0, 1, Delegate/convolution_2d 80:51
+transpose 81 -> div 82, 0.156, 0.1566, 0.0369076%, 27.1258%, 0, 1, Delegate/transpose 81 -> div 82:52
+convolution_2d 83 -> relu 84, 2.423, 2.4228, 0.571007%, 27.6968%, 0, 1, Delegate/convolution_2d 83 -> relu 84:53
+transpose 85, 0.534, 0.5352, 0.126136%, 27.823%, 0, 1, Delegate/transpose 85:54
+pad 86, 0.31, 0.3138, 0.0739566%, 27.8969%, 0, 1, Delegate/pad 86:55
+transpose 87, 0.264, 0.268, 0.0631624%, 27.9601%, 0, 1, Delegate/transpose 87:56
+convolution_2d 88 -> relu 89, 2.96, 2.9694, 0.69983%, 28.6599%, 0, 1, Delegate/convolution_2d 88 -> relu 89:57
+convolution_2d 90, 0.542, 0.5396, 0.127173%, 28.7871%, 0, 1, Delegate/convolution_2d 90:58
+convolution_2d 91 -> add 92 -> relu 93, 2.534, 2.5368, 0.597875%, 29.385%, 0, 1, Delegate/convolution_2d 91 -> add 92 -> relu 93:59
+convolution_2d 94 -> relu 95, 1.048, 1.05, 0.247465%, 29.6324%, 0, 1, Delegate/convolution_2d 94 -> relu 95:60
+transpose 96, 0.028, 0.0288, 0.00678761%, 29.6392%, 0, 1, Delegate/transpose 96:61
+pad 97, 0.039, 0.0382, 0.009003%, 29.6482%, 0, 1, Delegate/pad 97:62
+transpose 98, 0.035, 0.0344, 0.00810742%, 29.6563%, 0, 1, Delegate/transpose 98:63
+convolution_2d 99 -> relu 100, 0.957, 0.9596, 0.226159%, 29.8825%, 0, 1, Delegate/convolution_2d 99 -> relu 100:64
+convolution_2d 101 -> add 102 -> relu 103, 0.836, 0.8362, 0.197076%, 30.0796%, 0, 1, Delegate/convolution_2d 101 -> add 102 -> relu 103:65
+convolution_2d 104 -> relu 105, 1.054, 1.051, 0.2477%, 30.3273%, 0, 1, Delegate/convolution_2d 104 -> relu 105:66
+transpose 106, 0.081, 0.0808, 0.019043%, 30.3463%, 0, 1, Delegate/transpose 106:67
+pad 107, 0.058, 0.0592, 0.0139523%, 30.3603%, 0, 1, Delegate/pad 107:68
+transpose 108, 0.052, 0.052, 0.0122554%, 30.3725%, 0, 1, Delegate/transpose 108:69
+winograd_4x4_to_36 109, 0.068, 0.0676, 0.015932%, 30.3884%, 0, 1, Delegate/winograd_4x4_to_36 109:70
+convolution_winograd_4x4_6x6 109, 0.564, 0.562, 0.132453%, 30.5209%, 0, 1, Delegate/convolution_winograd_4x4_6x6 109:71
+winograd_36_to_4x4 109 -> relu 110, 0.082, 0.0816, 0.0192315%, 30.5401%, 0, 1, Delegate/winograd_36_to_4x4 109 -> relu 110:72
+convolution_2d 111 -> add 112 -> relu 113, 1.03, 1.03, 0.242751%, 30.7829%, 0, 1, Delegate/convolution_2d 111 -> add 112 -> relu 113:73
+convolution_2d 114 -> relu 115, 1.046, 1.0492, 0.247276%, 31.0302%, 0, 1, Delegate/convolution_2d 114 -> relu 115:74
+transpose 116, 0.027, 0.028, 0.00659906%, 31.0368%, 0, 1, Delegate/transpose 116:75
+pad 117, 0.039, 0.0392, 0.00923869%, 31.046%, 0, 1, Delegate/pad 117:76
+transpose 118, 0.034, 0.0332, 0.0078246%, 31.0538%, 0, 1, Delegate/transpose 118:77
+convolution_2d 119 -> relu 120, 1.469, 1.4638, 0.344989%, 31.3988%, 0, 1, Delegate/convolution_2d 119 -> relu 120:78
+convolution_2d 121 -> add 122 -> relu 123, 0.995, 0.9946, 0.234408%, 31.6332%, 0, 1, Delegate/convolution_2d 121 -> add 122 -> relu 123:79
+convolution_2d 124 -> relu 125, 1.05, 1.0514, 0.247795%, 31.881%, 0, 1, Delegate/convolution_2d 124 -> relu 125:80
+transpose 126, 0.043, 0.043, 0.0101343%, 31.8911%, 0, 1, Delegate/transpose 126:81
+pad 127, 0.055, 0.0554, 0.0130567%, 31.9042%, 0, 1, Delegate/pad 127:82
+transpose 128, 0.047, 0.0466, 0.0109827%, 31.9152%, 0, 1, Delegate/transpose 128:83
+convolution_2d 129 -> relu 130, 0.664, 0.6686, 0.157576%, 32.0728%, 0, 1, Delegate/convolution_2d 129 -> relu 130:84
+convolution_2d 131 -> add 132 -> relu 133, 0.324, 0.3232, 0.076172%, 32.1489%, 0, 1, Delegate/convolution_2d 131 -> add 132 -> relu 133:85
+convolution_2d 134 -> relu 135, 1.047, 1.048, 0.246993%, 32.3959%, 0, 1, Delegate/convolution_2d 134 -> relu 135:86
+transpose 136, 0.044, 0.044, 0.01037%, 32.4063%, 0, 1, Delegate/transpose 136:87
+pad 137, 0.057, 0.0568, 0.0133867%, 32.4197%, 0, 1, Delegate/pad 137:88
+transpose 138, 0.047, 0.047, 0.011077%, 32.4308%, 0, 1, Delegate/transpose 138:89
+winograd_4x4_to_36 139, 0.058, 0.0582, 0.0137166%, 32.4445%, 0, 1, Delegate/winograd_4x4_to_36 139:90
+convolution_winograd_4x4_6x6 139, 0.46, 0.4664, 0.109921%, 32.5544%, 0, 1, Delegate/convolution_winograd_4x4_6x6 139:91
+winograd_36_to_4x4 139 -> relu 140, 0.063, 0.0616, 0.0145179%, 32.5689%, 0, 1, Delegate/winograd_36_to_4x4 139 -> relu 140:92
+convolution_2d 141 -> add 142 -> relu 143, 0.786, 0.784, 0.184774%, 32.7537%, 0, 1, Delegate/convolution_2d 141 -> add 142 -> relu 143:93
+convolution_2d 144 -> relu 145, 0.613, 0.6142, 0.144755%, 32.8984%, 0, 1, Delegate/convolution_2d 144 -> relu 145:94
+transpose 146, 0.027, 0.0276, 0.00650479%, 32.9049%, 0, 1, Delegate/transpose 146:95
+pad 147, 0.033, 0.033, 0.00777746%, 32.9127%, 0, 1, Delegate/pad 147:96
+transpose 148, 0.029, 0.0282, 0.0066462%, 32.9194%, 0, 1, Delegate/transpose 148:97
+convolution_2d 149 -> relu 150, 0.641, 0.6346, 0.149563%, 33.0689%, 0, 1, Delegate/convolution_2d 149 -> relu 150:98
+convolution_2d 151, 0.64, 0.6386, 0.150506%, 33.2194%, 0, 1, Delegate/convolution_2d 151:99
+convolution_2d 152 -> add 153 -> relu 154, 3.07, 3.0662, 0.722644%, 33.9421%, 0, 1, Delegate/convolution_2d 152 -> add 153 -> relu 154:100
+convolution_2d 155 -> relu 156, 1.735, 1.7332, 0.408482%, 34.3506%, 0, 1, Delegate/convolution_2d 155 -> relu 156:101
+transpose 157, 0.039, 0.0382, 0.009003%, 34.3596%, 0, 1, Delegate/transpose 157:102
+pad 158, 0.047, 0.048, 0.0113127%, 34.3709%, 0, 1, Delegate/pad 158:103
+transpose 159, 0.045, 0.0446, 0.0105114%, 34.3814%, 0, 1, Delegate/transpose 159:104
+convolution_2d 160 -> relu 161, 3.761, 3.7578, 0.885641%, 35.267%, 0, 1, Delegate/convolution_2d 160 -> relu 161:105
+convolution_2d 162 -> add 163 -> relu 164, 1.217, 1.2148, 0.286305%, 35.5533%, 0, 1, Delegate/convolution_2d 162 -> add 163 -> relu 164:106
+convolution_2d 165 -> relu 166, 1.39, 1.3808, 0.325428%, 35.8788%, 0, 1, Delegate/convolution_2d 165 -> relu 166:107
+transpose 167, 0.029, 0.0288, 0.00678761%, 35.8856%, 0, 1, Delegate/transpose 167:108
+pad 168, 0.037, 0.0372, 0.00876732%, 35.8943%, 0, 1, Delegate/pad 168:109
+transpose 169, 0.034, 0.0342, 0.00806028%, 35.9024%, 0, 1, Delegate/transpose 169:110
+convolution_2d 170 -> relu 171, 1.569, 1.5728, 0.370679%, 36.2731%, 0, 1, Delegate/convolution_2d 170 -> relu 171:111
+convolution_2d 172 -> add 173 -> relu 174, 0.529, 0.529, 0.124675%, 36.3977%, 0, 1, Delegate/convolution_2d 172 -> add 173 -> relu 174:112
+convolution_2d 175, 0.572, 0.5916, 0.139429%, 36.5372%, 0, 1, Delegate/convolution_2d 175:113
+transpose 176, 0.012, 0.012, 0.00282817%, 36.54%, 0, 1, Delegate/transpose 176:114
+pad 177, 0.013, 0.0128, 0.00301671%, 36.543%, 0, 1, Delegate/pad 177:115
+transpose 178, 0.011, 0.0118, 0.00278103%, 36.5458%, 0, 1, Delegate/transpose 178:116
+pooling_2d 179, 0.008, 0.008, 0.00188545%, 36.5477%, 0, 1, Delegate/pooling_2d 179:117
+transpose 180, 0.008, 0.0076, 0.00179117%, 36.5495%, 0, 1, Delegate/transpose 180:118
+pad 181, 0.008, 0.0084, 0.00197972%, 36.5514%, 0, 1, Delegate/pad 181:119
+transpose 182, 0.007, 0.0066, 0.00155549%, 36.553%, 0, 1, Delegate/transpose 182:120
+pooling_2d 183, 0.006, 0.006, 0.00141408%, 36.5544%, 0, 1, Delegate/pooling_2d 183:121
+transpose 184 -> div 185, 0.007, 0.0064, 0.00150836%, 36.5559%, 0, 1, Delegate/transpose 184 -> div 185:122
+mul 186, 0.005, 0.0056, 0.00131981%, 36.5572%, 0, 1, Delegate/mul 186:123
+div 187, 0.004, 0.0046, 0.00108413%, 36.5583%, 0, 1, Delegate/div 187:124
+convolution_2d 188, 0.585, 0.5822, 0.137213%, 36.6955%, 0, 1, Delegate/convolution_2d 188:125
+transpose 189 -> div 190, 0.012, 0.0124, 0.00292244%, 36.6985%, 0, 1, Delegate/transpose 189 -> div 190:126
+convolution_2d 191, 0.631, 0.6052, 0.142634%, 36.8411%, 0, 1, Delegate/convolution_2d 191:127
+transpose 192 -> div 193, 0.012, 0.0124, 0.00292244%, 36.844%, 0, 1, Delegate/transpose 192 -> div 193:128
+convolution_2d 194, 0.603, 0.607, 0.143058%, 36.9871%, 0, 1, Delegate/convolution_2d 194:129
+transpose 195 -> div 196, 0.027, 0.028, 0.00659906%, 36.9937%, 0, 1, Delegate/transpose 195 -> div 196:130
+convolution_2d 197, 0.611, 0.611, 0.144001%, 37.1377%, 0, 1, Delegate/convolution_2d 197:131
+transpose 198 -> mul 199, 0.027, 0.0272, 0.00641052%, 37.1441%, 0, 1, Delegate/transpose 198 -> mul 199:132
+resize 200, 0.004, 0.0042, 0.000989859%, 37.1451%, 0, 1, Delegate/resize 200:133
+transpose 201 -> mul 202, 0.008, 0.0082, 0.00193258%, 37.147%, 0, 1, Delegate/transpose 201 -> mul 202:134
+Copy (NC, X32), 1.861, 2.4046, 0.566718%, 37.7137%, 0, 1, Delegate/Copy (NC	 X32):0
+Copy (NC, X32), 0.903, 1.3526, 0.318782%, 38.0325%, 0, 1, Delegate/Copy (NC	 X32):1
+Copy (NC, X32), 0.851, 0.489, 3.22694%, 41.2594%, 0, 28, Delegate/Copy (NC	 X32):2
+Copy (NC, X32), 0.859, 1.3336, 0.314304%, 41.5738%, 0, 1, Delegate/Copy (NC	 X32):3
+Copy (NC, X32), 0.855, 0.0676692, 0.414657%, 41.9884%, 0, 26, Delegate/Copy (NC	 X32):4
+Copy (NC, X32), 0.87, 0.659181, 4.9714%, 46.9598%, 0, 32, Delegate/Copy (NC	 X32):5
+Copy (NC, X32), 0.921, 6.82263, 25.7274%, 72.6872%, 0, 16, Delegate/Copy (NC	 X32):6
+Copy (NC, X32), 0.914, 0.8654, 0.203958%, 72.8912%, 0, 1, Delegate/Copy (NC	 X32):7
+Copy (NC, X32), 0.86, 0.7342, 0.173037%, 73.0642%, 0, 1, Delegate/Copy (NC	 X32):8
+Copy (NC, X32), 1.648, 1.2406, 0.292386%, 73.3566%, 0, 1, Delegate/Copy (NC	 X32):9
+SUM, 0.315, 0.319, 0.0751822%, 73.4318%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.0/fnode.0/combine/ReduceSum_1]:164
+Clamp (NC, F32), 0.688, 0.234387, 1.7677%, 75.1995%, 0, 32, Delegate/Clamp (NC	 F32):0
+Constant Pad (ND, X32), 0.666, 0.220495, 2.07866%, 77.2781%, 0, 40, Delegate/Constant Pad (ND	 X32):1
+Transpose (ND, X32), 0.069, 0.109346, 1.44317%, 78.7213%, 0, 56, Delegate/Transpose (ND	 X32):2
+CONV_2D, 0.527, 0.5586, 0.131651%, 78.8529%, 0, 1, [convolution_541]:168
+RESIZE_NEAREST_NEIGHBOR, 0.058, 0.0472, 0.0111241%, 78.8641%, 0, 1, [ResizeNearestNeighbor_1]:172
+Transpose (ND, X32), 1.285, 0.536573, 6.57592%, 85.44%, 0, 52, Delegate/Transpose (ND	 X32):0
+Divide (ND, F32), 0.052, 0.0817, 0.500633%, 85.9406%, 0, 26, Delegate/Divide (ND	 F32):1
+Transpose (ND, X32), 0.627, 0.272508, 1.66985%, 87.6105%, 0, 26, Delegate/Transpose (ND	 X32):3
+Divide (ND, F32), 0.206, 0.17752, 0.627571%, 88.238%, 0, 15, Delegate/Divide (ND	 F32):4
+SUM, 1.183, 1.1006, 0.25939%, 88.4974%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.0/fnode.1/combine/ReduceSum_1]:177
+CONV_2D, 1.549, 1.0974, 0.258636%, 88.7561%, 0, 1, [convolution_561]:181
+RESIZE_NEAREST_NEIGHBOR, 0.168, 0.1086, 0.0255949%, 88.7816%, 0, 1, [ResizeNearestNeighbor_2]:185
+SUM, 5.309, 3.332, 0.785288%, 89.5669%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.0/fnode.2/combine/ReduceSum_1]:190
+CONV_2D, 2.845, 3.2196, 0.758798%, 90.3257%, 0, 1, [convolution_581]:194
+RESIZE_NEAREST_NEIGHBOR, 0.107, 0.2162, 0.0509542%, 90.3767%, 0, 1, [ResizeNearestNeighbor_3]:198
+Multiply (ND, F32), 0.035, 0.1034, 0.0243694%, 90.4011%, 0, 1, Delegate/Multiply (ND	 F32):1
+SUM, 5.755, 3.6688, 0.864666%, 91.2657%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.0/fnode.3/combine/ReduceSum_1]:203
+CONV_2D, 9.012, 8.8182, 2.07828%, 93.344%, 0, 1, [convolution_601]:207
+PADV2, 0.144, 0.1424, 0.0335609%, 93.3776%, 0, 1, [PadV2_3]:209
+Max Pooling (NHWC, F32), 0.041, 0.157562, 0.594151%, 93.9717%, 0, 16, Delegate/Max Pooling (NHWC	 F32):1
+Multiply (ND, F32), 0.041, 0.0394, 0.00928582%, 93.981%, 0, 1, Delegate/Multiply (ND	 F32):3
+SUM, 0.861, 0.8174, 0.192645%, 94.1736%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.0/fnode.4/combine/ReduceSum_1]:216
+CONV_2D, 2.059, 2.0884, 0.492196%, 94.6658%, 0, 1, [convolution_621]:220
+RESIZE_NEAREST_NEIGHBOR, 0.028, 0.0234, 0.00551493%, 94.6713%, 0, 1, [ResizeNearestNeighbor_10]:413
+CONV_2D, 0.502, 0.4518, 0.106481%, 94.7778%, 0, 1, [convolution_761]:409
+SUM, 0.131, 0.1422, 0.0335138%, 94.8113%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.2/fnode.1/combine/ReduceSum_1]:405
+RESIZE_NEAREST_NEIGHBOR, 0.006, 0.0064, 0.00150836%, 94.8129%, 0, 1, [ResizeNearestNeighbor_9]:396
+CONV_2D, 0.142, 0.1422, 0.0335138%, 94.8464%, 0, 1, [convolution_751]:392
+SUM, 0.034, 0.0412, 0.00971005%, 94.8561%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.2/fnode.0/combine/ReduceSum_1]:388
+RESIZE_NEAREST_NEIGHBOR, 0.003, 0.0036, 0.000848451%, 94.8569%, 0, 1, [ResizeNearestNeighbor_8]:381
+CONV_2D, 0.08, 0.0886, 0.0208813%, 94.8778%, 0, 1, [convolution_741]:377
+SUM, 0.014, 0.0128, 0.00301671%, 94.8808%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.1/fnode.7/combine/ReduceSum_1]:373
+PADV2, 0.016, 0.0136, 0.00320526%, 94.884%, 0, 1, [PadV2_10]:366
+CONV_2D, 0.147, 0.152, 0.0358235%, 94.9199%, 0, 1, [convolution_731]:364
+SUM, 0.035, 0.0426, 0.01004%, 94.9299%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.1/fnode.6/combine/ReduceSum_1]:360
+PADV2, 0.018, 0.0192, 0.00452507%, 94.9344%, 0, 1, [PadV2_9]:353
+CONV_2D, 0.585, 0.551, 0.12986%, 95.0643%, 0, 1, [convolution_721]:351
+SUM, 0.206, 0.183, 0.0431296%, 95.1074%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.1/fnode.5/combine/ReduceSum_1]:347
+PADV2, 0.05, 0.0482, 0.0113598%, 95.1188%, 0, 1, [PadV2_8]:340
+CONV_2D, 1.913, 2.0394, 0.480647%, 95.5994%, 0, 1, [convolution_711]:338
+SUM, 0.912, 0.891, 0.209992%, 95.8094%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.1/fnode.4/combine/ReduceSum_1]:334
+Divide (ND, F32), 0.1, 0.0322333, 0.182323%, 95.9917%, 0, 24, Delegate/Divide (ND	 F32):3
+PADV2, 0.05, 0.0444, 0.0104642%, 96.0022%, 0, 1, [PadV2_4]:222
+SUM, 0.209, 0.1896, 0.0446851%, 96.0469%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.0/fnode.5/combine/ReduceSum_1]:229
+CONV_2D, 0.603, 0.5302, 0.124958%, 96.1718%, 0, 1, [convolution_641]:233
+PADV2, 0.023, 0.0206, 0.00485502%, 96.1767%, 0, 1, [PadV2_5]:235
+SUM, 0.038, 0.0436, 0.0102757%, 96.187%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.0/fnode.6/combine/ReduceSum_1]:242
+CONV_2D, 0.147, 0.1526, 0.0359649%, 96.2229%, 0, 1, [convolution_651]:246
+PADV2, 0.011, 0.0116, 0.0027339%, 96.2257%, 0, 1, [PadV2_6]:248
+SUM, 0.017, 0.0126, 0.00296958%, 96.2286%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.0/fnode.7/combine/ReduceSum_1]:255
+CONV_2D, 0.092, 0.1222, 0.0288002%, 96.2574%, 0, 1, [convolution_661]:259
+RESIZE_NEAREST_NEIGHBOR, 0.004, 0.0034, 0.000801315%, 96.2582%, 0, 1, [ResizeNearestNeighbor_4]:263
+SUM, 0.038, 0.0372, 0.00876732%, 96.267%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.1/fnode.0/combine/ReduceSum_1]:270
+CONV_2D, 0.168, 0.1498, 0.035305%, 96.3023%, 0, 1, [convolution_671]:274
+RESIZE_NEAREST_NEIGHBOR, 0.006, 0.0058, 0.00136695%, 96.3037%, 0, 1, [ResizeNearestNeighbor_5]:278
+SUM, 0.132, 0.1394, 0.0328539%, 96.3365%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.1/fnode.1/combine/ReduceSum_1]:287
+CONV_2D, 0.398, 0.443, 0.104407%, 96.4409%, 0, 1, [convolution_681]:291
+RESIZE_NEAREST_NEIGHBOR, 0.019, 0.0212, 0.00499643%, 96.4459%, 0, 1, [ResizeNearestNeighbor_6]:295
+SUM, 0.738, 0.7398, 0.174357%, 96.6203%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.1/fnode.2/combine/ReduceSum_1]:304
+CONV_2D, 2.054, 2.1088, 0.497004%, 97.1173%, 0, 1, [convolution_691]:308
+PADV2, 0.137, 0.1466, 0.0345508%, 97.1518%, 0, 1, [PadV2_7]:327
+CONV_2D, 8.524, 8.8646, 2.08922%, 99.2411%, 0, 1, [convolution_701]:325
+RESIZE_NEAREST_NEIGHBOR, 0.113, 0.1108, 0.0261134%, 99.2672%, 0, 1, [ResizeNearestNeighbor_7]:312
+SUM, 3.021, 3.1094, 0.732826%, 100%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.1/fnode.3/combine/ReduceSum_1]:321
+
+============================== Top by Computation Time ==============================
+node type, first, avg_ms, %, cdf%, mem KB, times called, name
+CONV_2D, 9.205, 9.0146, 2.12457%, 2.12457%, 0, 1, [convolution_861]:561
+CONV_2D, 8.524, 8.8646, 2.08922%, 4.21378%, 0, 1, [convolution_701]:325
+CONV_2D, 9.012, 8.8182, 2.07828%, 6.29206%, 0, 1, [convolution_601]:207
+CONV_2D, 8.923, 8.5438, 2.01361%, 8.30567%, 0, 1, [convolution_781]:443
+CONV_2D, 8.257, 7.7004, 1.81484%, 10.1205%, 0, 1, [onnx_tf_prefix_/class_net/act/Relu;convolution_91]:737
+transpose 4, 6.996, 6.9728, 1.64335%, 11.7639%, 0, 1, Delegate/transpose 4:3
+Copy (NC, X32), 0.921, 6.82263, 25.7274%, 37.4912%, 0, 16, Delegate/Copy (NC	 X32):6
+convolution_2d 2 -> relu 3, 5.558, 5.557, 1.30968%, 38.8009%, 0, 1, Delegate/convolution_2d 2 -> relu 3:2
+convolution_2d 160 -> relu 161, 3.761, 3.7578, 0.885641%, 39.6866%, 0, 1, Delegate/convolution_2d 160 -> relu 161:105
+SUM, 5.755, 3.6688, 0.864666%, 40.5512%, 0, 1, [onnx_tf_prefix_/fpn/cell/cell.0/fnode.3/combine/ReduceSum_1]:203
+
+Number of nodes executed: 303
+============================== Summary by node type ==============================
+node type, count, avg_ms, avg %, cdf %, mem KB, times called
+Copy (NC, X32), 10, 153.634, 36.2189%, 36.2189%, 0, 108
+CONV_2D, 67, 86.142, 20.3078%, 56.5267%, 0, 67
+Transpose (ND, X32), 13, 42.123, 9.93041%, 66.4571%, 0, 186
+SUM, 32, 24.836, 5.85503%, 72.3121%, 0, 32
+Constant Pad (ND, X32), 6, 9.481, 2.23513%, 74.5472%, 0, 67
+Clamp (NC, F32), 1, 7.5, 1.76811%, 76.3154%, 0, 32
+transpose 4, 1, 6.972, 1.64363%, 77.959%, 0, 1
+Divide (ND, F32), 3, 5.559, 1.31052%, 79.2695%, 0, 65
+convolution_2d 2 -> relu 3, 1, 5.557, 1.31005%, 80.5796%, 0, 1
+convolution_2d 160 -> relu 161, 1, 3.757, 0.885705%, 81.4653%, 0, 1
+convolution_2d 14 -> relu 15, 1, 3.383, 0.797535%, 82.2628%, 0, 1
+convolution_2d 152 -> add 153 -> relu 154, 1, 3.066, 0.722803%, 82.9856%, 0, 1
+convolution_2d 88 -> relu 89, 1, 2.969, 0.699935%, 83.6855%, 0, 1
+convolution_2d 47 -> add 48 -> relu 49, 1, 2.576, 0.607287%, 84.2928%, 0, 1
+convolution_2d 91 -> add 92 -> relu 93, 1, 2.536, 0.597857%, 84.8907%, 0, 1
+Max Pooling (NHWC, F32), 1, 2.521, 0.59432%, 85.485%, 0, 16
+convolution_2d 83 -> relu 84, 1, 2.422, 0.570981%, 86.056%, 0, 1
+convolution_2d 65 -> relu 66, 1, 2.132, 0.502614%, 86.5586%, 0, 1
+convolution_2d 44 -> relu 45, 1, 1.991, 0.469374%, 87.028%, 0, 1
+convolution_2d 39 -> relu 40, 1, 1.932, 0.455465%, 87.4834%, 0, 1
+convolution_2d 155 -> relu 156, 1, 1.733, 0.408551%, 87.892%, 0, 1
+convolution_2d 170 -> relu 171, 1, 1.572, 0.370596%, 88.2626%, 0, 1
+convolution_2d 34 -> relu 35, 1, 1.517, 0.35763%, 88.6202%, 0, 1
+convolution_2d 29 -> relu 30, 1, 1.468, 0.346078%, 88.9663%, 0, 1
+convolution_2d 119 -> relu 120, 1, 1.463, 0.344899%, 89.3112%, 0, 1
+convolution_2d 165 -> relu 166, 1, 1.38, 0.325332%, 89.6365%, 0, 1
+transpose 6, 1, 1.356, 0.319674%, 89.9562%, 0, 1
+convolution_2d 8, 1, 1.221, 0.287848%, 90.2441%, 0, 1
+convolution_2d 67 -> add 68 -> relu 69, 1, 1.221, 0.287848%, 90.5319%, 0, 1
+convolution_2d 16 -> add 17 -> relu 18, 1, 1.216, 0.286669%, 90.8186%, 0, 1
+convolution_2d 162 -> add 163 -> relu 164, 1, 1.214, 0.286198%, 91.1048%, 0, 1
+pad 5, 1, 1.188, 0.280068%, 91.3848%, 0, 1
+convolution_2d 124 -> relu 125, 1, 1.051, 0.247771%, 91.6326%, 0, 1
+convolution_2d 104 -> relu 105, 1, 1.051, 0.247771%, 91.8804%, 0, 1
+convolution_2d 94 -> relu 95, 1, 1.05, 0.247535%, 92.1279%, 0, 1
+convolution_2d 114 -> relu 115, 1, 1.049, 0.2473%, 92.3752%, 0, 1
+convolution_2d 134 -> relu 135, 1, 1.048, 0.247064%, 92.6223%, 0, 1
+convolution_2d 111 -> add 112 -> relu 113, 1, 1.03, 0.24282%, 92.8651%, 0, 1
+convolution_2d 80, 1, 1.006, 0.237162%, 93.1023%, 0, 1
+convolution_2d 60 -> relu 61, 1, 1.006, 0.237162%, 93.3394%, 0, 1
+convolution_2d 121 -> add 122 -> relu 123, 1, 0.994, 0.234333%, 93.5738%, 0, 1
+convolution_2d 99 -> relu 100, 1, 0.959, 0.226082%, 93.7998%, 0, 1
+PADV2, 16, 0.931, 0.219481%, 94.0193%, 0, 16
+convolution_2d 36 -> add 37 -> relu 38, 1, 0.909, 0.214295%, 94.2336%, 0, 1
+convolution_2d 26 -> add 27 -> relu 28, 1, 0.892, 0.210287%, 94.4439%, 0, 1
+convolution_2d 57 -> add 58 -> relu 59, 1, 0.867, 0.204393%, 94.6483%, 0, 1
+pooling_2d 7, 1, 0.86, 0.202743%, 94.851%, 0, 1
+convolution_2d 101 -> add 102 -> relu 103, 1, 0.836, 0.197085%, 95.0481%, 0, 1
+convolution_2d 141 -> add 142 -> relu 143, 1, 0.784, 0.184826%, 95.233%, 0, 1
+RESIZE_NEAREST_NEIGHBOR, 15, 0.776, 0.18294%, 95.4159%, 0, 15
+convolution_2d 46, 1, 0.766, 0.180583%, 95.5965%, 0, 1
+transpose 41, 1, 0.743, 0.175161%, 95.7716%, 0, 1
+convolution_2d 129 -> relu 130, 1, 0.668, 0.15748%, 95.9291%, 0, 1
+convolution_2d 151, 1, 0.638, 0.150407%, 96.0795%, 0, 1
+convolution_2d 149 -> relu 150, 1, 0.634, 0.149464%, 96.229%, 0, 1
+convolution_2d 19 -> relu 20, 1, 0.617, 0.145456%, 96.3744%, 0, 1
+convolution_2d 144 -> relu 145, 1, 0.614, 0.144749%, 96.5192%, 0, 1
+convolution_2d 197, 1, 0.611, 0.144042%, 96.6632%, 0, 1
+convolution_2d 194, 1, 0.607, 0.143099%, 96.8063%, 0, 1
+convolution_2d 191, 1, 0.605, 0.142627%, 96.949%, 0, 1
+transpose 11, 1, 0.602, 0.14192%, 97.0909%, 0, 1
+convolution_2d 175, 1, 0.591, 0.139327%, 97.2302%, 0, 1
+convolution_2d 188, 1, 0.582, 0.137205%, 97.3674%, 0, 1
+convolution_winograd_4x4_6x6 109, 1, 0.562, 0.13249%, 97.4999%, 0, 1
+convolution_2d 90, 1, 0.539, 0.127068%, 97.627%, 0, 1
+transpose 85, 1, 0.535, 0.126125%, 97.7531%, 0, 1
+convolution_2d 172 -> add 173 -> relu 174, 1, 0.529, 0.124711%, 97.8778%, 0, 1
+convolution_2d 70 -> relu 71, 1, 0.505, 0.119053%, 97.9969%, 0, 1
+convolution_winograd_4x4_6x6 139, 1, 0.466, 0.109859%, 98.1067%, 0, 1
+convolution_2d 50 -> relu 51, 1, 0.446, 0.105144%, 98.2119%, 0, 1
+convolution_2d 77 -> add 78 -> relu 79, 1, 0.424, 0.0999571%, 98.3118%, 0, 1
+convolution_2d 9 -> relu 10, 1, 0.378, 0.0891127%, 98.4009%, 0, 1
+pad 42, 1, 0.376, 0.0886412%, 98.4896%, 0, 1
+convolution_2d 55 -> relu 56, 1, 0.374, 0.0881697%, 98.5777%, 0, 1
+transpose 31, 1, 0.351, 0.0827475%, 98.6605%, 0, 1
+convolution_2d 131 -> add 132 -> relu 133, 1, 0.323, 0.0761466%, 98.7366%, 0, 1
+transpose 43, 1, 0.319, 0.0752036%, 98.8118%, 0, 1
+pad 86, 1, 0.313, 0.0737891%, 98.8856%, 0, 1
+pad 12, 1, 0.308, 0.0726103%, 98.9582%, 0, 1
+convolution_2d 75 -> relu 76, 1, 0.295, 0.0695456%, 99.0278%, 0, 1
+transpose 87, 1, 0.268, 0.0631804%, 99.091%, 0, 1
+pad 32, 1, 0.267, 0.0629447%, 99.1539%, 0, 1
+pad 0, 1, 0.263, 0.0620017%, 99.2159%, 0, 1
+transpose 13, 1, 0.261, 0.0615302%, 99.2774%, 0, 1
+transpose 1, 1, 0.213, 0.0502143%, 99.3277%, 0, 1
+transpose 33, 1, 0.204, 0.0480926%, 99.3757%, 0, 1
+transpose 62, 1, 0.162, 0.0381912%, 99.4139%, 0, 1
+transpose 81 -> div 82, 1, 0.156, 0.0367767%, 99.4507%, 0, 1
+Multiply (ND, F32), 2, 0.142, 0.0334762%, 99.4842%, 0, 2
+Convolution (NHWC, F32) IGEMM, 2, 0.132, 0.0311187%, 99.5153%, 0, 5
+pad 63, 1, 0.101, 0.0238105%, 99.5391%, 0, 1
+transpose 64, 1, 0.085, 0.0200386%, 99.5592%, 0, 1
+winograd_36_to_4x4 109 -> relu 110, 1, 0.081, 0.0190956%, 99.5783%, 0, 1
+transpose 106, 1, 0.08, 0.0188598%, 99.5971%, 0, 1
+transpose 21, 1, 0.071, 0.0167381%, 99.6139%, 0, 1
+winograd_4x4_to_36 109, 1, 0.067, 0.0157951%, 99.6296%, 0, 1
+winograd_36_to_4x4 139 -> relu 140, 1, 0.061, 0.0143806%, 99.644%, 0, 1
+pad 107, 1, 0.059, 0.0139091%, 99.6579%, 0, 1
+winograd_4x4_to_36 139, 1, 0.058, 0.0136734%, 99.6716%, 0, 1
+pad 137, 1, 0.056, 0.0132019%, 99.6848%, 0, 1
+convolution_2d 24 -> relu 25, 1, 0.056, 0.0132019%, 99.698%, 0, 1
+pad 127, 1, 0.055, 0.0129661%, 99.711%, 0, 1
+transpose 108, 1, 0.052, 0.0122589%, 99.7232%, 0, 1
+pad 22, 1, 0.049, 0.0115516%, 99.7348%, 0, 1
+pad 158, 1, 0.048, 0.0113159%, 99.7461%, 0, 1
+transpose 138, 1, 0.047, 0.0110801%, 99.7572%, 0, 1
+pad 73, 1, 0.047, 0.0110801%, 99.7682%, 0, 1
+transpose 128, 1, 0.046, 0.0108444%, 99.7791%, 0, 1
+transpose 74, 1, 0.044, 0.0103729%, 99.7895%, 0, 1
+transpose 23, 1, 0.044, 0.0103729%, 99.7998%, 0, 1
+transpose 159, 1, 0.044, 0.0103729%, 99.8102%, 0, 1
+transpose 136, 1, 0.044, 0.0103729%, 99.8206%, 0, 1
+transpose 72, 1, 0.043, 0.0101372%, 99.8307%, 0, 1
+transpose 126, 1, 0.043, 0.0101372%, 99.8409%, 0, 1
+pad 117, 1, 0.039, 0.00919417%, 99.8501%, 0, 1
+transpose 157, 1, 0.038, 0.00895842%, 99.859%, 0, 1
+pad 97, 1, 0.038, 0.00895842%, 99.868%, 0, 1
+pad 168, 1, 0.037, 0.00872267%, 99.8767%, 0, 1
+transpose 98, 1, 0.034, 0.00801543%, 99.8847%, 0, 1
+transpose 169, 1, 0.034, 0.00801543%, 99.8927%, 0, 1
+transpose 118, 1, 0.033, 0.00777968%, 99.9005%, 0, 1
+pad 147, 1, 0.033, 0.00777968%, 99.9083%, 0, 1
+transpose 96, 1, 0.028, 0.00660094%, 99.9149%, 0, 1
+transpose 195 -> div 196, 1, 0.028, 0.00660094%, 99.9215%, 0, 1
+transpose 167, 1, 0.028, 0.00660094%, 99.9281%, 0, 1
+transpose 148, 1, 0.028, 0.00660094%, 99.9347%, 0, 1
+transpose 116, 1, 0.028, 0.00660094%, 99.9413%, 0, 1
+transpose 198 -> mul 199, 1, 0.027, 0.00636519%, 99.9477%, 0, 1
+transpose 146, 1, 0.027, 0.00636519%, 99.954%, 0, 1
+pad 53, 1, 0.027, 0.00636519%, 99.9604%, 0, 1
+transpose 54, 1, 0.024, 0.00565795%, 99.966%, 0, 1
+transpose 52, 1, 0.023, 0.0054222%, 99.9715%, 0, 1
+transpose 192 -> div 193, 1, 0.012, 0.00282897%, 99.9743%, 0, 1
+transpose 189 -> div 190, 1, 0.012, 0.00282897%, 99.9771%, 0, 1
+transpose 176, 1, 0.012, 0.00282897%, 99.98%, 0, 1
+pad 177, 1, 0.012, 0.00282897%, 99.9828%, 0, 1
+transpose 178, 1, 0.011, 0.00259323%, 99.9854%, 0, 1
+transpose 201 -> mul 202, 1, 0.008, 0.00188598%, 99.9873%, 0, 1
+pooling_2d 179, 1, 0.008, 0.00188598%, 99.9892%, 0, 1
+pad 181, 1, 0.008, 0.00188598%, 99.991%, 0, 1
+transpose 180, 1, 0.007, 0.00165024%, 99.9927%, 0, 1
+transpose 184 -> div 185, 1, 0.006, 0.00141449%, 99.9941%, 0, 1
+transpose 182, 1, 0.006, 0.00141449%, 99.9955%, 0, 1
+pooling_2d 183, 1, 0.006, 0.00141449%, 99.9969%, 0, 1
+mul 186, 1, 0.005, 0.00117874%, 99.9981%, 0, 1
+resize 200, 1, 0.004, 0.000942991%, 99.999%, 0, 1
+div 187, 1, 0.004, 0.000942991%, 100%, 0, 1
+
+Timings (microseconds): count=5 first=435199 curr=412215 min=402834 max=441076 avg=424303 std=14434
+Memory (bytes): count=0
+303 nodes observed
+
+

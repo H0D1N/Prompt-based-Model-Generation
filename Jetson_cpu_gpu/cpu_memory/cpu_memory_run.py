@@ -10,12 +10,12 @@ modules = 18
 configs_num = 500
 config_indices, configs = configs_random(configs_num)
 
-modul_config = [[] for _ in range(modules)] # 记录每一次训练的config
-module_data = [[] for _ in range(modules) ] # 记录每一次训练的module latency
+modul_config = [[] for _ in range(modules)] # configs for each module
+module_data = [[] for _ in range(modules) ] # module latency of all modules for each set of configs
 overall_latency = []
 
 for batch in batch_size:
-    file_prefix = "data/cpu_modeling/"+ "/batch_" + str(batch) 
+    file_prefix = "data"+ "/batch_" + str(batch) 
     inputs = torch.randn(batch, 3, 640, 640, dtype=torch.float)
 
     for config_num, config in enumerate(configs):
@@ -55,17 +55,17 @@ for batch in batch_size:
         overall_latency.append(totlal_latency)
 
     for module_num in range(modules):
-        with open(file_prefix + "/module_" + str(module_num + 1) + ".txt", "w") as f:
-            # 输入当前module对应的config的index
+        with open(file_prefix + "/latency/module_" + str(module_num + 1) + ".txt", "w") as f:
+            # index for current module
             for index in config_indices[module_num]:
                 f.write(str(index) + "\t")
             f.write("\n")
             for count in range(configs_num):
-                # 输入当前module每一次训练的config
+                # configs for each set of configs for current module
                 for config in modul_config[module_num][count]:
                     f.write(str(config) + "\t")
                 f.write("\t")
-                # 输入当前module每一次训练的latency
+                # latency for each set of configs for current modules
                 for latency in module_data[module_num][count]:
                     f.write(str(latency) + "\t")
                 f.write("\t")

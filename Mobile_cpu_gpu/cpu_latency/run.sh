@@ -19,7 +19,7 @@ do
     --num_threads=4  --enable_op_profiling=true \
     --profiling_output_csv_file=$device_dir/results/$i.csv  > $device_dir/results/$i.txt" 
 
-    adb -s $device pull --sync $device_dir/results/ $local_dir/data/
+    adb -s $device pull --sync $device_dir/results/ $local_dir/data_newest/
     adb -s $device shell "rm -rf $device_dir/models/*"
     adb -s $device shell "rm -rf $device_dir/results/*"
 done

@@ -18,7 +18,7 @@ for _ in range(warmups):
     _ = model(inputs)
 
 for batch in batch_size:
-    file_path = "data/cuda_modeling/"+ "/batch_" + str(batch) + ".txt"
+    file_path = "data"+ "/batch_" + str(batch) + ".txt"
     inputs = torch.randn(batch, 3, 640, 640, dtype=torch.float).to(device)
     model_latency = np.zeros((sample_num))
 

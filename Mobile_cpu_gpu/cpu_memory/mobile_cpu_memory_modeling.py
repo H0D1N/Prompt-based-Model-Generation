@@ -37,6 +37,31 @@ model_memory_train = np.array(peak_memory_footprint[:slice_num]).reshape(slice_n
 model_memory_valid = np.array(peak_memory_footprint[slice_num:]).reshape(runs - slice_num, 1)  # 将后200个元素作为测试集
 
 
+# “测量mem模式”情况下的推理延时
+
+# 用于存储1000个avg值的列表
+avg_Inference = []
+# 处理从1.txt到1000.txt的文件
+for file_number in range(1, runs + 1):
+    file_path = f"old_data/{file_number}.txt"
+
+    with open(file_path, 'r') as file:
+        log = file.read()
+    # 使用正则表达式匹配目标值
+    match = re.search(r'Inference \(avg\): ([+-]?\d+(\.\d*)?(e[+-]?\d+)?)', log)
+
+    # 提取目标值
+    if match:
+        avg_Inference.append(float(match.group(1)))
+
+    else:
+        print("未找到目标值")
+
+print("avg_Inference (us):\n", avg_Inference)
+print()
+
+
+
 
 # 初始化configs_train和configs_valid
 configs_train = np.ones((slice_num, 39))
@@ -119,3 +144,5 @@ plt.title('Boxplot of Model Memory Accuracy (using all 38 configs)', fontsize=12
 plt.grid(True)
 plt.tight_layout()  # To improve spacing
 plt.show()
+
+print(" %f ms" % (np.mean(avg_Inference)/1000))

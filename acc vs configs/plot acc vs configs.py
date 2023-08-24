@@ -49,7 +49,7 @@ x_values = [
 ]
 
 # Create the plot
-plt.figure(figsize=(9, 6))  # Increase figure size
+plt.figure(figsize=(7, 6))  # Increase figure size
 
 
 

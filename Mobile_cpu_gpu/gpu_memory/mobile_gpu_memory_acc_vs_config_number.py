@@ -38,6 +38,30 @@ for file_number in range(1, runs+1):
 
 mem = peak_memory_footprint
 
+# "开启mem测量"情况下的推理延时
+# 用于存储1000个avg值的列表
+avg_Inference = []
+
+# 处理从1.txt到1000.txt的文件
+for file_number in range(1, runs+1):
+    file_path = f"data/results/{file_number}.txt"
+
+    with open(file_path, 'r') as file:
+        log = file.read()
+    # 使用正则表达式匹配目标值
+    match = re.search(r'Inference \(avg\): ([+-]?\d+(\.\d*)?(e[+-]?\d+)?)', log)
+
+    # 提取目标值
+    if match:
+        avg_Inference.append(float(match.group(1)))
+
+    else:
+        print("未找到目标值")
+
+
+
+
+
 # Define the validation data size
 valid_size = 400
 
@@ -89,3 +113,4 @@ with open("../../acc vs configs/data/mobile_gpu_memory_accuracy_values.txt", "w"
 
 
 print("%f GB" % (np.mean(mem)/1024))  # GB
+print("%f ms" % (np.mean(avg_Inference)/1000))

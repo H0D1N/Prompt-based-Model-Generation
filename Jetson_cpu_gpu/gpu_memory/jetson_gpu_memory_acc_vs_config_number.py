@@ -38,6 +38,21 @@ print()
 
 mem = peak_memory_footprint
 
+# # "开启测量mem"情况下的推理延时
+# avg_Inference = []
+# with open("data/batch_1.txt", 'r') as file:
+#     for i, line in enumerate(file):
+#         values = line.strip().split()  # Split the line into individual values
+#         if len(values) >= 39:  # Ensure the line has at least 39 values
+#             Inference_value = float(values[38])  # Read the 39th value (0-based index)
+#             avg_Inference.append(Inference_value)
+#         else:
+#             print(f"Skipping line with fewer than 39 values: {line}")
+#
+# print(avg_Inference)
+# print()
+
+
 # Define the validation data size
 valid_size = 100
 

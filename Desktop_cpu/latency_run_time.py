@@ -7,7 +7,7 @@ runs = 3    # actual profiling number in each sampling
 
 batch_size = [1]
 modules = 18
-sample_num = 1000    # number of samples in each batch size
+sample_num = 2000    # number of samples in each batch size
 config_indices, configs = configs_random(sample_num)
 overall_latency = [0] * sample_num
 
@@ -33,7 +33,7 @@ if __name__ == "__main__":
                 overall_latency[config_num] += (end_time - start_time) * 1000
             overall_latency[config_num] /= runs
 
-        with open("data/latency_time.txt", "w") as f:
+        with open("data/latency_time_new.txt", "w") as f:
             for count, config in enumerate(configs):
                 for confg_data in config:
                     f.write(str(confg_data) + " ")

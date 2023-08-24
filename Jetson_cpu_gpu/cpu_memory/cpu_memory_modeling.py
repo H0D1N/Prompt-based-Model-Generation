@@ -9,7 +9,7 @@ slice_num = int(runs * ratio)  # 800
 # 创建一个空列表来存储Self CPU Mem值
 Self_CPU_Mem_values = []
 
-# 读取1000个txt文件
+# 读取500个txt文件
 for i in range(500):
     filename = f"data/cpu_memory/batch_1/raw_data/run_No.{i}.txt"
     try:

@@ -1,19 +1,43 @@
 import numpy as np
+import re
 import matplotlib.pyplot as plt
 
-# Load data from the file
-data = np.loadtxt("data/latency_time.txt")
+runs = 500
+configs_data = np.ones((runs, 39))
 
+# 从configs.txt文件中提取数值
+with open("data/batch_1.txt", 'r') as file:
+    for i, line in enumerate(file):
+        # 将每一行的前38个数值赋值给configs_train和configs_valid的前38列
+        values = list(map(float, line.strip().split()[:38]))
+
+        configs_data[i, :38] = np.array(values)
 # Split data into input (configs) and output (latency) variables
-configs = data[:, :38]
-latency = data[:, 38]
+configs = configs_data
+
+
+avg_Inference = []
+with open("data/batch_1.txt", 'r') as file:
+    for i, line in enumerate(file):
+        values = line.strip().split()  # Split the line into individual values
+        if len(values) >= 39:  # Ensure the line has at least 39 values
+            Inference_value = float(values[38])  # Read the 39th value (0-based index)
+            avg_Inference.append(Inference_value)
+        else:
+            print(f"Skipping line with fewer than 39 values: {line}")
+
+print(avg_Inference)
+print()
 
 # Define the validation data size
-valid_size = 200
+valid_size = 100
+
+# Split data into input (configs) and output (latency) variables
+latency = avg_Inference
 
 # Initialize lists to store accuracy values and training data sizes
 accuracy_values = []
-train_data_sizes = list(range(50, 801, 50))  # Train data sizes starting from 50 and increasing by 50
+train_data_sizes = list(range(50, runs - valid_size + 1, 50))  # Train data sizes starting from 50 and increasing by 50
 
 # Loop through different training data sizes
 for train_size in train_data_sizes:
@@ -53,10 +77,8 @@ plt.tight_layout()  # To improve spacing
 plt.show()
 
 # Save accuracy_values to a text file
-with open("../acc vs configs/data/server_cpu_latency_accuracy_values.txt", "w") as f:
+with open("../../acc vs configs/data/jetson_gpu_latency_accuracy_values.txt", "w") as f:
     for value in accuracy_values:
         f.write("%.4f\n" % value)
-
-
 
 print("%f ms" % (np.mean(latency)))  # ms

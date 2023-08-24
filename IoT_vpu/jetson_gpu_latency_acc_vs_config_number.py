@@ -2,18 +2,35 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Load data from the file
-data = np.loadtxt("data/latency_time.txt")
+runs = 500
+configs_data = np.ones((runs, 39))
+model_latency_data = np.zeros((runs, 1))
+batch_size = [1]
+
+
+
+for batch in batch_size:
+    file_path = "data/gpu_latency/batch_" + str(batch) + ".txt"
+    # Read data from the TXT file and ignore the first line
+    with open(file_path, "r") as file:
+        lines = file.readlines()[:(runs + 1)]
+    for count, line in enumerate(lines):
+        data = line.strip().split()
+        configs_data[count][0:38] = [float(x) for x in data[0:38]]
+        model_latency_data[count] = float(data[-1])
+
 
 # Split data into input (configs) and output (latency) variables
-configs = data[:, :38]
-latency = data[:, 38]
-
+configs = configs_data
+latency = model_latency_data
+# print(configs)
+# print(latency)
 # Define the validation data size
-valid_size = 200
+valid_size = 100
 
 # Initialize lists to store accuracy values and training data sizes
 accuracy_values = []
-train_data_sizes = list(range(50, 801, 50))  # Train data sizes starting from 50 and increasing by 50
+train_data_sizes = list(range(50, runs - valid_size + 1, 50))  # Train data sizes starting from 50 and increasing by 50
 
 # Loop through different training data sizes
 for train_size in train_data_sizes:
@@ -53,10 +70,9 @@ plt.tight_layout()  # To improve spacing
 plt.show()
 
 # Save accuracy_values to a text file
-with open("../acc vs configs/data/server_cpu_latency_accuracy_values.txt", "w") as f:
+with open("../acc vs configs/data/jetson_gpu_latency_accuracy_values.txt", "w") as f:
     for value in accuracy_values:
         f.write("%.4f\n" % value)
-
 
 
 print("%f ms" % (np.mean(latency)))  # ms

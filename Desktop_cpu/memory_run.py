@@ -16,10 +16,11 @@ overall_latency = []
 
 for batch in batch_size:
     file_prefix = "data/memory/"+ "batch_" + str(batch) 
-    inputs = torch.randn(batch, 3, 640, 640, dtype=torch.float)
+    inputs = torch.randn(batch, 3, 640, 640, dtype=torch.float).cuda()
 
     for config_num, config in enumerate(configs):
         model = get_model(config)
+        model = model.cuda()
         trace_name = file_prefix + "/raw_data/run_No." + str(config_num) + "_trace.json"
         print("-------------------------------------------------------------------------------------------------------------------------------------------------------------")
         print("Batch size: " + str(batch), "    Sample No:", config_num)
@@ -34,8 +35,13 @@ for batch in batch_size:
             p.export_chrome_trace(trace_name)        
         
         with profile(
+<<<<<<< HEAD:server_cpu/memory_run.py
+            activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+             profile_memory=True,
+=======
             activities=[ProfilerActivity.CPU],
             profile_memory=True,
+>>>>>>> f221a4849d5aaed2fba50610c0942a4d3ed9887d:Desktop_cpu/memory_run.py
             schedule=torch.profiler.schedule(
                 wait=0,
                 warmup=warmups,

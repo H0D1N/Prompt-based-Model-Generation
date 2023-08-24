@@ -3,17 +3,17 @@ import matplotlib.pyplot as plt
 import re
 from mpl_toolkits.mplot3d import Axes3D
 
-runs = 1000
+runs = 2000
 ratio = 0.8  # 80% of the data is used for training, and 20% is used for testing
 slice_num = int(runs * ratio)  # 800
 
 
-# 用于存储1000个avg值的列表
+# 用于存储2000个avg值的列表
 avg_Inference = []
 
 # 处理从1.txt到1000.txt的文件
-for file_number in range(1, 1001):
-    file_path = f"data/results/{file_number}.txt"
+for file_number in range(1, runs + 1):
+    file_path = f"data_newest/results/{file_number}.txt"
 
     with open(file_path, 'r') as file:
         log = file.read()
@@ -41,7 +41,7 @@ configs_train = np.ones((slice_num, 39))
 configs_valid = np.ones((runs - slice_num, 39))
 
 # 从configs.txt文件中提取数值并赋值给configs_train和configs_valid
-with open("../onnx_models_op12/configs.txt", 'r') as file:
+with open("../configs.txt", 'r') as file:
     for i, line in enumerate(file):
         # 将每一行的前38个数值赋值给configs_train和configs_valid的前38列
         values = list(map(float, line.strip().split()[:38]))

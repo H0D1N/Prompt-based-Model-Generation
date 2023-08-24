@@ -3,13 +3,12 @@ import re
 import matplotlib.pyplot as plt
 
 
-runs = 1000
+runs = 2000
 configs_data = np.ones((runs, 39))
 # 从configs.txt文件中提取数值
 with open("../configs.txt", 'r') as file:
     for i, line in enumerate(file):
-        if i >= 1000:
-            break
+
         # 将每一行的前38个数值赋值给configs_train和configs_valid的前38列
         values = list(map(float, line.strip().split()[:38]))
 
@@ -22,8 +21,8 @@ configs = configs_data
 peak_memory_footprint = []
 
 # 处理从1.txt到1000.txt的文件
-for file_number in range(1, 1001):
-    file_path = f"old_data/{file_number}.txt"
+for file_number in range(1, runs+1):
+    file_path = f"data/results/{file_number}.txt"
 
     with open(file_path, 'r') as file:
         log = file.read()
@@ -40,7 +39,7 @@ for file_number in range(1, 1001):
 mem = peak_memory_footprint
 
 # Define the validation data size
-valid_size = 200
+valid_size = 400
 
 # Initialize lists to store accuracy values and training data sizes
 accuracy_values = []
@@ -84,7 +83,7 @@ plt.tight_layout()  # To improve spacing
 plt.show()
 
 # Save accuracy_values to a text file
-with open("../../acc vs configs/data/mobile_cpu_memory_accuracy_values.txt", "w") as f:
+with open("../../acc vs configs/data/mobile_gpu_memory_accuracy_values.txt", "w") as f:
     for value in accuracy_values:
         f.write("%.4f\n" % value)
 

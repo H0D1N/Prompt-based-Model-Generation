@@ -8,12 +8,12 @@ ratio = 0.8  # 80% of the data is used for training, and 20% is used for testing
 slice_num = int(runs * ratio)  # 800
 
 
-# 用于存储1000个avg值的列表
+# 用于存储2000个avg值的列表
 avg_Inference = []
 
 # 处理从1.txt到1000.txt的文件
 for file_number in range(1, runs + 1):
-    file_path = f"data/results/{file_number}.txt"
+    file_path = f"data_newest/results/{file_number}.txt"
 
     with open(file_path, 'r') as file:
         log = file.read()

@@ -3,13 +3,13 @@ import re
 import matplotlib.pyplot as plt
 
 
-runs = 1000
+runs = 500
 configs_data = np.ones((runs, 39))
+
 # 从configs.txt文件中提取数值
-with open("../configs.txt", 'r') as file:
+with open("data/batch_1/configs.txt", 'r') as file:
     for i, line in enumerate(file):
-        if i >= 1000:
-            break
+
         # 将每一行的前38个数值赋值给configs_train和configs_valid的前38列
         values = list(map(float, line.strip().split()[:38]))
 
@@ -18,29 +18,28 @@ with open("../configs.txt", 'r') as file:
 configs = configs_data
 
 
-# 用于存储1000个值的列表
+
+
+# 用于存储500个值的列表
 peak_memory_footprint = []
 
-# 处理从1.txt到1000.txt的文件
-for file_number in range(1, 1001):
-    file_path = f"old_data/{file_number}.txt"
+file_path = f"data/batch_1/memory_data.txt"
+# Read data from the file
+memory_data = []
+with open(file_path, "r") as f:
+    for line in f:
+        memory_value = float(line.strip())
+        peak_memory_footprint.append(memory_value)
 
-    with open(file_path, 'r') as file:
-        log = file.read()
-    # 使用正则表达式匹配目标值
-    match = re.search(r'Overall peak memory footprint \(MB\) via periodic monitoring: ([\d.]+)', log)
 
-    # 提取目标值
-    if match:
-        peak_memory_footprint.append(float(match.group(1)))
-        #print("提取的Overall peak memory footprint值:", peak_memory_footprint)
-    else:
-        print("未找到目标值")
+
+print("Overall peak memory footprint (MB):\n", peak_memory_footprint)
+print()
 
 mem = peak_memory_footprint
 
 # Define the validation data size
-valid_size = 200
+valid_size = 100
 
 # Initialize lists to store accuracy values and training data sizes
 accuracy_values = []
@@ -84,7 +83,7 @@ plt.tight_layout()  # To improve spacing
 plt.show()
 
 # Save accuracy_values to a text file
-with open("../../acc vs configs/data/mobile_cpu_memory_accuracy_values.txt", "w") as f:
+with open("../../acc vs configs/data/jetson_gpu_memory_accuracy_values.txt", "w") as f:
     for value in accuracy_values:
         f.write("%.4f\n" % value)
 

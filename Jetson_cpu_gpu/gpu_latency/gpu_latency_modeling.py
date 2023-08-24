@@ -13,7 +13,7 @@ configs_valid = np.ones((runs-slice_num, 39))
 model_latency_valid = np.zeros((runs-slice_num, 1))
 
 for batch in batch_size:
-    file_path = "data/gpu_latency/batch_" + str(batch) + ".txt"
+    file_path = "data/batch_" + str(batch) + ".txt"
     # Read data from the TXT file and ignore the first line
     with open(file_path, "r") as file:
         lines = file.readlines()[:(runs + 1)]
@@ -69,7 +69,7 @@ for batch in batch_size:
     ############################## box_plot #####################################
     print("model_latency_acc is:\n", model_latency_acc)
     # Save model_latency_acc to a TXT file
-    np.savetxt('../box_plot/box_plot_data/jetson_gpu_model_latency_acc.txt', model_latency_acc)
+    np.savetxt('../../box_plot/box_plot_data/jetson_gpu_model_latency_acc.txt', model_latency_acc)
 
     # Plotting the boxplot of model_latency_acc
     # fig, ax = plt.subplots()

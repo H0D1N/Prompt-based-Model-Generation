@@ -12,7 +12,7 @@ peak_memory_footprint = []
 
 # 处理从1.txt到1000.txt的文件
 for file_number in range(1, 1001):
-    file_path = f"data/cpu_memory/results/{file_number}.txt"
+    file_path = f"old_data/{file_number}.txt"
 
     with open(file_path, 'r') as file:
         log = file.read()
@@ -43,8 +43,10 @@ configs_train = np.ones((slice_num, 39))
 configs_valid = np.ones((runs - slice_num, 39))
 
 # 从configs.txt文件中提取数值并赋值给configs_train和configs_valid
-with open("../onnx_models_op12/configs.txt", 'r') as file:
+with open("../configs.txt", 'r') as file:
     for i, line in enumerate(file):
+        if i >= 1000:
+            break  # 停止读取文件后续的内容，仅处理前1000行
         # 将每一行的前38个数值赋值给configs_train和configs_valid的前38列
         values = list(map(float, line.strip().split()[:38]))
         if i < slice_num:

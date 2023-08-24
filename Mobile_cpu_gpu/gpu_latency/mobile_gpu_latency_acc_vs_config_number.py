@@ -12,7 +12,7 @@ avg_Inference = []
 
 # 处理从1.txt到1000.txt的文件
 for file_number in range(1, runs+1):
-    file_path = f"data_newest/results/{file_number}.txt"
+    file_path = f"data/results/{file_number}.txt"
 
     with open(file_path, 'r') as file:
         log = file.read()
@@ -84,7 +84,7 @@ plt.tight_layout()  # To improve spacing
 plt.show()
 
 # Save accuracy_values to a text file
-with open("../../acc vs configs/data/mobile_cpu_latency_accuracy_values.txt", "w") as f:
+with open("../../acc vs configs/data/mobile_gpu_latency_accuracy_values.txt", "w") as f:
     for value in accuracy_values:
         f.write("%.4f\n" % value)
 

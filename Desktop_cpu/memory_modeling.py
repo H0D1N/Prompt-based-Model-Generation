@@ -43,10 +43,9 @@ print()
 configs_train = np.ones((slice_num, 39))
 configs_valid = np.ones((runs - slice_num, 39))
 
-model_memory_train = model_latency_train = np.array(Self_CPU_Mem_values[:slice_num]).reshape(slice_num,
-                                                                                             1)  # 将前800个元素作为训练集
-model_memory_valid = model_latency_valid = np.array(Self_CPU_Mem_values[slice_num:]).reshape(runs - slice_num,
-                                                                                             1)  # 将后200个元素作为测试集
+model_memory_train = np.array(Self_CPU_Mem_values[:slice_num]).reshape(slice_num, 1)  # 将前800个元素作为训练集
+model_memory_valid = np.array(Self_CPU_Mem_values[slice_num:]).reshape(runs - slice_num, 1)  # 将后200个元素作为测试集
+
 
 for file_num in range(1, 19):
     file_path = "data/memory/batch_1/latency/module_" + str(file_num) + ".txt"
@@ -67,7 +66,6 @@ for file_num in range(1, 19):
                 configs_train[count][35] = float(data[0])
                 configs_train[count][36] = float(data[1])
                 configs_train[count][37] = float(data[2])
-                model_latency_train[count] = round(np.mean([float(val) for val in data[-3:]]) / 1000, 3)
 
 
         else:
@@ -82,7 +80,6 @@ for file_num in range(1, 19):
                 configs_valid[count - slice_num][35] = float(data[0])
                 configs_valid[count - slice_num][36] = float(data[1])
                 configs_valid[count - slice_num][37] = float(data[2])
-                model_latency_valid[count - slice_num] = round(np.mean([float(val) for val in data[-3:]]) / 1000, 3)
 
 configs_train_T = configs_train.T
 A1 = np.dot(configs_train_T, configs_train)
@@ -90,10 +87,7 @@ A2 = np.linalg.inv(A1)
 A3 = np.dot(A2, configs_train_T)
 X = np.dot(A3, model_memory_train)
 
-coefficients_list = [X[0, 0], X[1, 0], X[2, 0], X[3, 0], X[4, 0], X[5, 0], X[6, 0], X[7, 0], X[8, 0], X[9, 0], X[10, 0],
-                     X[11, 0], X[12, 0], X[13, 0], X[14, 0], X[15, 0], X[16, 0], X[17, 0], X[18, 0], X[19, 0], X[20, 0],
-                     X[21, 0], X[22, 0], X[23, 0], X[24, 0], X[25, 0], X[26, 0], X[27, 0], X[28, 0], X[29, 0], X[30, 0],
-                     X[31, 0], X[32, 0], X[33, 0], X[34, 0], X[35, 0], X[36, 0], X[37, 0]]
+coefficients_list = [X[0, 0], X[1, 0], X[2, 0], X[3, 0], X[4, 0], X[5, 0], X[6, 0], X[7, 0], X[8, 0], X[9, 0], X[10, 0], X[11, 0], X[12, 0], X[13, 0], X[14, 0], X[15, 0], X[16, 0], X[17, 0], X[18, 0], X[19, 0], X[20, 0], X[21, 0], X[22, 0], X[23, 0], X[24, 0], X[25, 0], X[26, 0], X[27, 0], X[28, 0], X[29, 0], X[30, 0], X[31, 0], X[32, 0], X[33, 0], X[34, 0], X[35, 0], X[36, 0], X[37, 0]]
 print('coefficients_list:\n', coefficients_list)
 
 print(
@@ -147,9 +141,3 @@ plt.title('Boxplot of Model Memory Accuracy (using all 38 configs)', fontsize=12
 plt.grid(True)
 plt.tight_layout()  # To improve spacing
 plt.show()
-
-# ”开启测量mem“情况下的模型延时
-model_latency = np.append(model_latency_train, model_latency_valid)
-print(model_latency)
-avg_model_latency = np.mean(model_latency)
-print("%f ms" % avg_model_latency)

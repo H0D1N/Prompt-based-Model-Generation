@@ -2,18 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Load data from the file
-data = np.loadtxt("data/latency_time.txt")
+data = np.loadtxt("data/latency_time_new.txt")
 
 # Split data into input (configs) and output (latency) variables
 configs = data[:, :38]
 latency = data[:, 38]
 
 # Define the validation data size
-valid_size = 200
+valid_size = 400
 
 # Initialize lists to store accuracy values and training data sizes
 accuracy_values = []
-train_data_sizes = list(range(50, 801, 50))  # Train data sizes starting from 50 and increasing by 50
+train_data_sizes = list(range(50, 1601, 50))  # Train data sizes starting from 50 and increasing by 50
 
 # Loop through different training data sizes
 for train_size in train_data_sizes:

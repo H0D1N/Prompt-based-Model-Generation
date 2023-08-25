@@ -38,7 +38,7 @@ for file_path in file_paths:
 
 # Determine x-axis values for each group of data
 x_values = [
-    list(range(50, 801, 50)),  # For jetson related files
+    list(range(50, 1601, 50)),  # For jetson related files
     list(range(50, 801, 50)),  # For other files
     list(range(50, 401, 50)),  # For other files
     list(range(50, 401, 50)),  # For other files
@@ -71,7 +71,7 @@ for text in legend.get_texts():
     text.set_fontweight('bold')
 
 # Set the x-axis limit to start from 100
-plt.xlim(100, )
+#plt.xlim(100, )
 plt.tight_layout()
 
 # Show the plot

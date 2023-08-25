@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import re
-runs = 1000
+runs = 2000
 ratio = 0.8  # 80% of the data is used for training, and 20% is used for testing
 slice_num = int(runs * ratio)  # 800
 
@@ -14,7 +14,7 @@ model_latency_train = np.zeros((slice_num, 1))
 model_latency_valid = np.zeros((runs-slice_num, 1))
 
 # 从configs.txt文件中提取数值并赋值给model_latency_train和model_latency_valid
-with open("data/latency_time.txt", 'r') as file:
+with open("data/latency_time_new.txt", 'r') as file:
     for i, line in enumerate(file):
         # 将每一行的第39列数值赋值给configs_train和configs_valid
         values = list(map(float, line.strip().split()[38:]))
